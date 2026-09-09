@@ -266,7 +266,7 @@ button { font-family: inherit; }
   border-bottom: 1px solid var(--border-on-dark);
   flex-wrap: wrap;
 }
-.portada__logo { width: 220px; height: auto; }
+.portada__logo { width: 220px; height: auto; color: var(--london-cream); }
 .portada__acciones { display: flex; gap: var(--space-2); flex-wrap: wrap; }
 
 .portada__cuerpo { padding-top: var(--space-6); max-width: 62ch; }
@@ -274,12 +274,19 @@ button { font-family: inherit; }
   font-size: var(--text-xl);
   color: var(--neutral-0);
 }
-.portada__lectura {
+.portada__subtitulo {
   margin-top: var(--space-3);
   font-size: var(--text-md);
-  font-weight: var(--weight-regular);
+  font-weight: var(--weight-medium);
   color: var(--london-mint);
   line-height: var(--leading-snug);
+}
+.portada__lectura {
+  margin-top: var(--space-4);
+  font-size: var(--text-base);
+  font-weight: var(--weight-regular);
+  color: var(--text-on-dark-muted);
+  line-height: var(--leading-normal);
 }
 .portada__lectura b {
   font-family: var(--font-numeric);
@@ -815,7 +822,8 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
   .kpis { grid-template-columns: repeat(2, 1fr); }
   .portada__logo { width: 180px; }
   .portada__titulo { font-size: var(--text-lg); }
-  .portada__lectura { font-size: var(--text-base); }
+  .portada__subtitulo { font-size: var(--text-base); }
+  .portada__lectura { font-size: var(--text-sm); }
   .resumenes { grid-template-columns: 1fr; }
 }
 

@@ -229,7 +229,7 @@
     const f = new Date(estado.ultimoGuardado);
     el.metaGuardado.textContent = 'Último cambio guardado en este navegador el ' +
       f.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }) +
-      ' a las ' + f.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }) + '.';
+      ' a las ' + f.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
   }
 
   function renderKpis() {
