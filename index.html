@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <!-- Al actualizar styles.css o app.js, sube el número de versión (?v=) para que
      el navegador baje el archivo nuevo y no la copia guardada en caché. -->
-<link rel="stylesheet" href="styles.css?v=6">
+<link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
 
@@ -120,8 +120,11 @@
     <article class="panel panel--foco">
       <h3 class="panel__titulo">Requieren seguimiento</h3>
       <p class="panel__ayuda" id="ayudaFoco">Cuentas AAA y AA sin cita conseguida.</p>
-      <div class="panel__cuerpo panel__cuerpo--scroll">
+      <div class="panel__cuerpo panel__cuerpo--scroll" id="cuerpoFoco">
         <ul class="lista-foco" id="listaFoco"></ul>
+      </div>
+      <div class="panel__pie">
+        <button class="btn btn--texto" id="btnVerTodasFoco" type="button" aria-expanded="false" hidden></button>
       </div>
     </article>
   </section>
@@ -152,7 +155,6 @@
           <h3 class="copia__titulo">WhatsApp</h3>
           <div class="copia__acciones">
             <button class="btn btn--chico" type="button" data-copiar="msjWhats">Copiar mensaje</button>
-            <a class="btn btn--chico btn--claro" id="msjWhatsLink" target="_blank" rel="noopener">Abrir WhatsApp</a>
           </div>
         </header>
         <textarea class="copia__texto" id="msjWhats" rows="14" spellcheck="false" aria-label="Mensaje de WhatsApp"></textarea>
@@ -164,7 +166,6 @@
           <h3 class="copia__titulo">Correo</h3>
           <div class="copia__acciones">
             <button class="btn btn--chico" type="button" data-copiar="msjCorreo">Copiar mensaje</button>
-            <a class="btn btn--chico btn--claro" id="msjCorreoLink">Abrir correo</a>
           </div>
         </header>
         <div class="campo copia__asunto">
@@ -320,10 +321,10 @@
 <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js?v=6"></script>
-<script src="data.js?v=6"></script>
-<script src="mensajes.js?v=6"></script>
-<script src="nube.js?v=6"></script>
-<script src="app.js?v=6"></script>
+<script src="config.js?v=7"></script>
+<script src="data.js?v=7"></script>
+<script src="mensajes.js?v=7"></script>
+<script src="nube.js?v=7"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>

@@ -368,9 +368,11 @@ button { font-family: inherit; }
   gap: var(--space-4);
   margin-bottom: var(--space-7);
 }
+.resumenes > * { min-width: 0; }   /* sin esto, las tablas empujan el ancho de la página */
 .resumenes[hidden] { display: none; }
 
 .panel {
+  min-width: 0;
   background: var(--surface-card);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
@@ -386,34 +388,31 @@ button { font-family: inherit; }
 }
 .panel__ayuda { font-size: var(--text-xs); color: var(--text-secondary); }
 .panel__cuerpo { overflow-x: auto; }
-.panel__cuerpo--scroll {
-  flex: 1;
-  min-height: 140px;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
-}
+.panel__cuerpo--scroll { overflow-y: auto; scrollbar-gutter: stable; }
+.panel__cuerpo--scroll.esta-expandido { max-height: 260px; }
 .panel--foco { min-height: 0; }
+.panel__pie { margin-top: auto; padding-top: var(--space-2); }
 
 /* Tablas de resumen */
-.mini { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.mini { width: 100%; border-collapse: collapse; font-size: var(--text-xs); }
 .mini th {
   text-align: left;
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
   color: var(--text-secondary);
-  padding: 0 var(--space-2) var(--space-2);
+  padding: 0 6px var(--space-2);
   border-bottom: 1px solid var(--border-subtle);
   white-space: nowrap;
 }
 .mini th.num { text-align: right; }
 .mini td {
-  padding: var(--space-3) var(--space-2);
+  padding: var(--space-3) 6px;
   border-bottom: 1px solid var(--neutral-100);
   white-space: nowrap;
 }
 .mini tr:last-child td { border-bottom: none; }
 .mini td:first-child { font-weight: var(--weight-semibold); }
-.mini .celda-avance { min-width: 96px; }
+.mini .celda-avance { width: 84px; }
 .mini .barra { margin: 0 0 var(--space-1); }
 .mini .barra-pct {
   font-family: var(--font-numeric);
@@ -430,6 +429,7 @@ button { font-family: inherit; }
   align-items: center;
   gap: var(--space-3);
   width: 100%;
+  min-width: 0;
   padding: var(--space-3) var(--space-1);
   background: none;
   border: none;
@@ -440,6 +440,8 @@ button { font-family: inherit; }
 }
 .foco:hover { background: var(--green-100); }
 .foco__empresa {
+  flex: 1;
+  min-width: 0;
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
   color: var(--text-primary);
@@ -447,7 +449,7 @@ button { font-family: inherit; }
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.foco__zona { margin-left: auto; font-size: var(--text-xs); color: var(--text-secondary); white-space: nowrap; }
+.foco__zona { flex: none; font-size: var(--text-xs); color: var(--text-secondary); white-space: nowrap; }
 .lista-foco__vacio { padding: var(--space-4) 0; font-size: var(--text-sm); color: var(--text-secondary); }
 
 /* ============ 5b. ENVIAR MENSAJE ============ */

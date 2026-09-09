@@ -61,6 +61,7 @@
     filtros: { buscar: '', clasificacion: '', zona: '', industria: '', estatus: '' },
     orden: { campo: null, dir: 'asc' },   // null = orden original del Excel
     idAbierto: null,
+    focoExpandido: false,
     ultimoGuardado: null,
     almacenDisponible: true,
     modo: 'local',        // 'local' = localStorage · 'nube' = base compartida
@@ -307,6 +308,8 @@
       agrupar('clasificacion', ['AAA', 'AA', 'A']).map(filaResumen).join('');
   }
 
+  const FOCO_VISIBLES = 3;   // cuántas cuentas se listan sin expandir
+
   /** Cuentas AAA/AA sin cita conseguida: la lista de trabajo del día. */
   function renderFoco() {
     const foco = estado.cuentas
@@ -320,9 +323,20 @@
 
     if (!foco.length) {
       el.listaFoco.innerHTML = '<li class="lista-foco__vacio">No hay cuentas AAA ni AA pendientes de cita.</li>';
+      el.btnVerTodasFoco.hidden = true;
+      el.cuerpoFoco.classList.remove('esta-expandido');
       return;
     }
-    el.listaFoco.innerHTML = foco.map(c =>
+
+    const visibles = estado.focoExpandido ? foco : foco.slice(0, FOCO_VISIBLES);
+    el.btnVerTodasFoco.hidden = foco.length <= FOCO_VISIBLES;
+    el.btnVerTodasFoco.textContent = estado.focoExpandido
+      ? 'Ver menos'
+      : 'Ver todas (' + foco.length + ')';
+    el.btnVerTodasFoco.setAttribute('aria-expanded', String(estado.focoExpandido));
+    el.cuerpoFoco.classList.toggle('esta-expandido', estado.focoExpandido);
+
+    el.listaFoco.innerHTML = visibles.map(c =>
       '<li><button class="foco" type="button" data-id="' + escapar(c.id) + '">' +
         '<span class="clasif clasif--' + c.clasificacion + '">' + c.clasificacion + '</span>' +
         '<span class="foco__empresa">' + escapar(c.empresa) + '</span>' +
@@ -647,57 +661,19 @@
       .split('[Cargo]').join(esVacio(c.cargo) ? '[cargo]' : c.cargo);
   }
 
-  /** Teléfono mexicano de 10 dígitos -> enlace de WhatsApp. */
-  function telefonoWhatsapp(telefono) {
-    if (esVacio(telefono)) return '';
-    const digitos = String(telefono).replace(/\D/g, '');
-    if (digitos.length === 10) return '52' + digitos;
-    if (digitos.length === 12 && digitos.indexOf('52') === 0) return digitos;
-    if (digitos.length === 13 && digitos.indexOf('521') === 0) return digitos;
-    return digitos || '';
-  }
-
   function llenarSelectorEmpresas() {
     const ordenadas = estado.cuentas.slice().sort((a, b) => a.empresa.localeCompare(b.empresa, 'es'));
     el.msjEmpresa.innerHTML = '<option value="">Selecciona una empresa…</option>' +
       ordenadas.map(c => '<option value="' + escapar(c.id) + '">' + escapar(c.empresa) + '</option>').join('');
   }
 
-  /** Deja los botones de enviar/copiar en un estado coherente. */
+  /** Habilita o apaga los controles según haya o no una empresa elegida. */
   function estadoAccionesMensaje(c) {
     const hayCuenta = !!c;
     el.msjWhats.disabled = !hayCuenta;
     el.msjCorreo.disabled = !hayCuenta;
     el.msjAsunto.disabled = !hayCuenta;
     document.querySelectorAll('[data-copiar]').forEach(b => { b.disabled = !hayCuenta; });
-
-    const tel = hayCuenta ? telefonoWhatsapp(c.telefono) : '';
-    if (tel) {
-      el.msjWhatsLink.href = 'https://wa.me/' + tel + '?text=' + encodeURIComponent(el.msjWhats.value);
-      el.msjWhatsLink.classList.remove('btn--inactivo');
-      el.msjWhatsLink.removeAttribute('aria-disabled');
-      el.msjWhatsLink.title = 'Abrir la conversación con ' + c.telefono;
-    } else {
-      el.msjWhatsLink.removeAttribute('href');
-      el.msjWhatsLink.classList.add('btn--inactivo');
-      el.msjWhatsLink.setAttribute('aria-disabled', 'true');
-      el.msjWhatsLink.title = hayCuenta ? 'Esta cuenta no tiene teléfono registrado' : '';
-    }
-
-    const correo = hayCuenta && !esVacio(c.correo) ? c.correo : '';
-    if (correo) {
-      el.msjCorreoLink.href = 'mailto:' + correo +
-        '?subject=' + encodeURIComponent(el.msjAsunto.value) +
-        '&body=' + encodeURIComponent(el.msjCorreo.value);
-      el.msjCorreoLink.classList.remove('btn--inactivo');
-      el.msjCorreoLink.removeAttribute('aria-disabled');
-      el.msjCorreoLink.title = 'Escribir a ' + correo;
-    } else {
-      el.msjCorreoLink.removeAttribute('href');
-      el.msjCorreoLink.classList.add('btn--inactivo');
-      el.msjCorreoLink.setAttribute('aria-disabled', 'true');
-      el.msjCorreoLink.title = hayCuenta ? 'Esta cuenta no tiene correo registrado' : '';
-    }
   }
 
   /** Genera los dos mensajes para la cuenta elegida. */
@@ -1031,7 +1007,8 @@
       'archivoImportar', 'fBuscar', 'fClasificacion', 'fZona', 'fIndustria', 'fEstatus',
       'acceso', 'accesoNombre', 'accesoClave', 'accesoError', 'btnEntrar', 'btnSalir',
       'bloqueMensajes', 'btnToggleMensajes', 'msjEmpresa', 'msjContacto', 'msjFicha',
-      'msjWhats', 'msjAsunto', 'msjCorreo', 'msjWhatsLink', 'msjCorreoLink', 'btnPrepararMensaje'];
+      'msjWhats', 'msjAsunto', 'msjCorreo', 'btnPrepararMensaje',
+      'cuerpoFoco', 'btnVerTodasFoco'];
     ids.forEach(id => { el[id] = document.getElementById(id); });
     el.lectura = el.lecturaEjecutiva;
     el.conteo = el.conteoResultados;
@@ -1144,11 +1121,12 @@
     document.querySelectorAll('[data-copiar]').forEach(boton => {
       boton.addEventListener('click', () => copiarTexto(el[boton.dataset.copiar]));
     });
-    // Al editar un mensaje, los enlaces de WhatsApp y correo llevan el texto actual.
-    [el.msjWhats, el.msjAsunto, el.msjCorreo].forEach(campo => {
-      campo.addEventListener('input', () => estadoAccionesMensaje(obtener(el.msjEmpresa.value)));
-    });
     el.btnPrepararMensaje.addEventListener('click', prepararMensajeDesdeCajon);
+
+    el.btnVerTodasFoco.addEventListener('click', () => {
+      estado.focoExpandido = !estado.focoExpandido;
+      renderFoco();
+    });
 
     el.btnToggleMensajes.addEventListener('click', () => {
       const oculto = !el.bloqueMensajes.hidden;
