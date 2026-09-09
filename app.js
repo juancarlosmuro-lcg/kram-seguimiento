@@ -54,14 +54,21 @@
     ['id',             'id']
   ];
 
+  const CLAVE_NOMBRE = 'lcg.nombre';
+
   const estado = {
     cuentas: [],
     filtros: { buscar: '', clasificacion: '', zona: '', industria: '', estatus: '' },
     orden: { campo: null, dir: 'asc' },   // null = orden original del Excel
     idAbierto: null,
     ultimoGuardado: null,
-    almacenDisponible: true
+    almacenDisponible: true,
+    modo: 'local',        // 'local' = localStorage · 'nube' = base compartida
+    autor: '',            // nombre de quien usa la herramienta (solo en modo nube)
+    conectado: false      // canal de tiempo real activo
   };
+
+  const enNube = () => estado.modo === 'nube';
 
   const $ = sel => document.querySelector(sel);
   const el = {};
@@ -151,20 +158,34 @@
     }
   }
 
-  /** Une la base del Excel con el seguimiento guardado. */
-  function construirCuentas() {
-    const guardado = leerAlmacen();
+  /** Une la base del Excel con un mapa de seguimiento { id: {...} }. */
+  function construirCuentas(seguimiento) {
+    const guardado = seguimiento || {};
     estado.cuentas = CUENTAS_INICIALES.map(base => {
       const extra = guardado[base.id] || {};
-      return Object.assign({}, base, {
-        estatus: ESTATUS_VALORES.indexOf(extra.estatus) !== -1 ? extra.estatus : ESTATUS_INICIAL,
-        fechaCita: typeof extra.fechaCita === 'string' ? extra.fechaCita : '',
-        notas: typeof extra.notas === 'string' ? extra.notas : ''
-      });
+      return Object.assign({}, base, camposSeguimiento(extra));
     });
   }
 
-  function guardar(mensaje) {
+  /** Normaliza los campos editables; sirve tanto para localStorage como para la nube. */
+  function camposSeguimiento(extra) {
+    return {
+      estatus: ESTATUS_VALORES.indexOf(extra.estatus) !== -1 ? extra.estatus : ESTATUS_INICIAL,
+      fechaCita: typeof extra.fechaCita === 'string' ? extra.fechaCita : '',
+      notas: typeof extra.notas === 'string' ? extra.notas : '',
+      actualizadoPor: typeof extra.actualizadoPor === 'string' ? extra.actualizadoPor : '',
+      actualizadoEn: typeof extra.actualizadoEn === 'string' ? extra.actualizadoEn : ''
+    };
+  }
+
+  /** Guarda una cuenta donde corresponda según el modo, y avisa al usuario. */
+  function persistir(cuenta, mensaje) {
+    if (enNube()) {
+      NubeLCG.guardar(cuenta, estado.autor)
+        .then(() => { estado.ultimoGuardado = new Date().toISOString(); renderMetaGuardado(); aviso(mensaje || 'Guardado'); })
+        .catch(e => aviso('No se guardó: ' + e.message, 'error'));
+      return;
+    }
     const ok = escribirAlmacen();
     renderMetaGuardado();
     if (ok) aviso(mensaje || 'Guardado');
@@ -217,7 +238,31 @@
         : 'Todas las cuentas AAA ya tienen cita.');
   }
 
+  /** Devuelve la cuenta modificada más recientemente (para el encabezado). */
+  function ultimoMovimiento() {
+    let ultima = null;
+    estado.cuentas.forEach(c => {
+      if (c.actualizadoEn && (!ultima || c.actualizadoEn > ultima.actualizadoEn)) ultima = c;
+    });
+    return ultima;
+  }
+
+  function fechaHoraCorta(iso) {
+    const f = new Date(iso);
+    return f.toLocaleDateString('es-MX', { day: 'numeric', month: 'long' }) +
+      ' a las ' + f.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+  }
+
   function renderMetaGuardado() {
+    if (enNube()) {
+      const ultima = ultimoMovimiento();
+      const conexion = estado.conectado ? 'Seguimiento compartido en vivo' : 'Conectando con la base compartida…';
+      el.metaGuardado.textContent = ultima
+        ? conexion + '. Último cambio: ' + escapar(ultima.empresa) + ', el ' + fechaHoraCorta(ultima.actualizadoEn) +
+          (ultima.actualizadoPor ? ' por ' + ultima.actualizadoPor : '') + '.'
+        : conexion + '. Todavía no hay cambios registrados.';
+      return;
+    }
     if (!estado.almacenDisponible) {
       el.metaGuardado.textContent = 'Este navegador bloquea el almacenamiento local: los cambios no se conservarán al recargar. Usa Exportar para respaldarlos.';
       return;
@@ -484,17 +529,45 @@
     const c = obtener(id);
     if (!c) return;
     Object.assign(c, cambios);
-    guardar((opciones && opciones.mensaje) || 'Guardado');
+    c.actualizadoPor = enNube() ? estado.autor : '';
+    c.actualizadoEn = new Date().toISOString();
+    persistir(c, (opciones && opciones.mensaje) || 'Guardado');
+    refrescarTrasCambio(id, cambios);
+  }
+
+  /** Refresca la vista tras cambiar una cuenta, repintando lo mínimo posible. */
+  function refrescarTrasCambio(id, cambios) {
+    const c = obtener(id);
+    if (!c) return;
     renderMetricas();
-
     const campoOrden = estado.orden.campo;
-    const afectaOrden = campoOrden && Object.prototype.hasOwnProperty.call(cambios, campoOrden);
-    const afectaFiltro = !coincide(c);
-
-    if (afectaOrden || afectaFiltro) renderTabla();
+    const afectaOrden = cambios
+      ? !!(campoOrden && Object.prototype.hasOwnProperty.call(cambios, campoOrden))
+      : (campoOrden === 'estatus' || campoOrden === 'fechaCita');
+    if (afectaOrden || !coincide(c)) renderTabla();
     else refrescarFila(id);
-
     if (estado.idAbierto === id) pintarCajon(c);
+  }
+
+  /** Llega un cambio hecho por otra persona: se aplica sin tocar lo que estás editando. */
+  function alCambioRemoto(id, datos) {
+    if (!id) { recargarDesdeNube(); return; }
+    const c = obtener(id);
+    if (!c) return;
+    const nuevo = camposSeguimiento(datos || {});
+    const igual = c.estatus === nuevo.estatus && c.fechaCita === nuevo.fechaCita && c.notas === nuevo.notas;
+    Object.assign(c, nuevo);
+    renderMetaGuardado();
+    if (igual) return;                       // es el eco de mi propio cambio
+    refrescarTrasCambio(id);
+    const quien = nuevo.actualizadoPor && nuevo.actualizadoPor !== estado.autor ? nuevo.actualizadoPor : '';
+    aviso(quien ? quien + ' actualizó ' + c.empresa : c.empresa + ' se actualizó');
+  }
+
+  function recargarDesdeNube() {
+    return NubeLCG.cargar()
+      .then(mapa => { construirCuentas(mapa); renderTodo(); })
+      .catch(e => aviso('No se pudo leer la base: ' + e.message, 'error'));
   }
 
   function pintarCajon(c) {
@@ -515,7 +588,10 @@
       ['Correo', esVacio(c.correo) ? '—'
         : '<a href="mailto:' + escapar(c.correo) + '">' + escapar(c.correo) + '</a>'],
       ['Estatus', '<span class="badge ' + claseEstatus(c.estatus) + '">' + escapar(c.estatus) + '</span>'],
-      ['Fecha de cita', fechaLegible(c.fechaCita)]
+      ['Fecha de cita', fechaLegible(c.fechaCita)],
+      ['Último cambio', c.actualizadoEn
+        ? fechaHoraCorta(c.actualizadoEn) + (c.actualizadoPor ? ' · ' + c.actualizadoPor : '')
+        : 'Sin cambios']
     ];
     el.cajonDatos.innerHTML = filas.map(f =>
       '<dt>' + f[0] + '</dt><dd>' + (f[0] === 'Teléfono' || f[0] === 'Correo' || f[0] === 'Estatus'
@@ -651,6 +727,7 @@
     const porId = new Map(estado.cuentas.map(c => [c.id, c]));
     const porNombre = new Map(estado.cuentas.map(c => [normalizar(c.empresa), c]));
     let aplicados = 0, sinCoincidencia = 0;
+    const tocadas = [];
 
     registros.forEach(r => {
       const cuenta = (r.id && porId.get(String(r.id).trim())) ||
@@ -668,15 +745,26 @@
         else if (/^\d{4}-\d{2}-\d{2}$/.test(f)) { cuenta.fechaCita = f; cambio = true; }
       }
       if (r.notas !== undefined) { cuenta.notas = String(r.notas); cambio = true; }
-      if (cambio) aplicados++;
+      if (cambio) { aplicados++; tocadas.push(cuenta); }
     });
 
     if (!aplicados) throw new Error('El archivo es válido pero ninguna cuenta coincidió con la base.');
 
+    const marca = new Date().toISOString();
+    tocadas.forEach(c => { c.actualizadoPor = enNube() ? estado.autor : ''; c.actualizadoEn = marca; });
+
+    const resumen = 'Importadas ' + aplicados + ' cuentas' +
+      (sinCoincidencia ? ' · ' + sinCoincidencia + ' sin coincidencia' : '');
+
+    if (enNube()) {
+      NubeLCG.guardarVarias(tocadas, estado.autor)
+        .then(() => { renderTodo(); aviso(resumen); })
+        .catch(e => aviso('No se pudo subir la importación: ' + e.message, 'error'));
+      return;
+    }
     escribirAlmacen();
     renderTodo();
-    aviso('Importadas ' + aplicados + ' cuentas' +
-      (sinCoincidencia ? ' · ' + sinCoincidencia + ' sin coincidencia' : ''));
+    aviso(resumen);
   }
 
   function importarArchivo(archivo) {
@@ -709,16 +797,89 @@
   }
 
   function restablecer() {
+    cerrarCajon();
+    if (enNube()) {
+      NubeLCG.limpiar()
+        .then(() => { construirCuentas({}); renderTodo(); aviso('Seguimiento restablecido para todo el equipo'); })
+        .catch(e => aviso('No se pudo restablecer: ' + e.message, 'error'));
+      return;
+    }
     try { localStorage.removeItem(CLAVE_ALMACEN); } catch (e) { /* sin almacenamiento */ }
     estado.ultimoGuardado = null;
-    construirCuentas();
+    construirCuentas(leerAlmacen());
     estado.ultimoGuardado = null;
-    cerrarCajon();
     renderTodo();
     aviso('Datos iniciales restablecidos');
   }
 
   /* ============ 9. ARRANQUE ============ */
+
+  /* --- Nombre de quien usa la herramienta (para saber quién movió qué) --- */
+  function leerNombre() {
+    try { return localStorage.getItem(CLAVE_NOMBRE) || ''; } catch (e) { return ''; }
+  }
+  function guardarNombre(nombre) {
+    estado.autor = nombre;
+    try { localStorage.setItem(CLAVE_NOMBRE, nombre); } catch (e) { /* sin almacenamiento */ }
+  }
+
+  /* --- Pantalla de acceso --- */
+  function mostrarAcceso(error) {
+    el.acceso.hidden = false;
+    el.accesoError.hidden = !error;
+    if (error) el.accesoError.textContent = error;
+    setTimeout(() => (estado.autor ? el.accesoClave : el.accesoNombre).focus(), 50);
+  }
+
+  function ocultarAcceso() {
+    el.acceso.hidden = true;
+    el.accesoError.hidden = true;
+  }
+
+  function intentarEntrar() {
+    const nombre = el.accesoNombre.value.trim();
+    const clave = el.accesoClave.value;
+    if (!nombre) { mostrarAcceso('Escribe tu nombre para saber quién actualiza cada cuenta.'); return; }
+    if (!clave) { mostrarAcceso('Escribe la contraseña del equipo.'); return; }
+
+    el.btnEntrar.disabled = true;
+    el.btnEntrar.textContent = 'Entrando…';
+    NubeLCG.entrar(clave)
+      .then(() => { guardarNombre(nombre); el.accesoClave.value = ''; return entrarAlTablero(); })
+      .catch(e => mostrarAcceso(e.message))
+      .then(() => { el.btnEntrar.disabled = false; el.btnEntrar.textContent = 'Entrar'; });
+  }
+
+  /** Ya con sesión: carga la base compartida y se queda escuchando los cambios. */
+  function entrarAlTablero() {
+    ocultarAcceso();
+    return recargarDesdeNube().then(() => {
+      NubeLCG.escuchar(alCambioRemoto, conectado => {
+        estado.conectado = conectado;
+        renderMetaGuardado();
+      });
+      renderMetaGuardado();
+    });
+  }
+
+  function cerrarSesion() {
+    const terminar = () => {
+      estado.conectado = false;
+      cerrarCajon();
+      construirCuentas({});
+      renderTodo();
+      mostrarAcceso();
+    };
+    NubeLCG.salir().then(terminar, terminar);
+  }
+
+  function arrancarNube() {
+    el.btnSalir.hidden = false;
+    el.accesoNombre.value = estado.autor;
+    NubeLCG.haySesion()
+      .then(hay => (hay ? entrarAlTablero() : mostrarAcceso()))
+      .catch(e => mostrarAcceso(e.message));
+  }
 
   function cachearNodos() {
     const ids = ['lecturaEjecutiva', 'metaGuardado', 'kpiTotal', 'kpiAgendadas', 'kpiRealizadas',
@@ -726,7 +887,8 @@
       'listaFoco', 'cuerpoTabla', 'mensajeVacio', 'conteoResultados', 'aviso', 'cajon', 'velo',
       'cajonEmpresa', 'cajonClasif', 'cajonDatos', 'cajonEstatus', 'cajonFecha', 'cajonNotas',
       'btnCerrarCajon', 'modal', 'modalTitulo', 'modalTexto', 'btnModalCancelar', 'btnModalConfirmar',
-      'archivoImportar', 'fBuscar', 'fClasificacion', 'fZona', 'fIndustria', 'fEstatus'];
+      'archivoImportar', 'fBuscar', 'fClasificacion', 'fZona', 'fIndustria', 'fEstatus',
+      'acceso', 'accesoNombre', 'accesoClave', 'accesoError', 'btnEntrar', 'btnSalir'];
     ids.forEach(id => { el[id] = document.getElementById(id); });
     el.lectura = el.lecturaEjecutiva;
     el.conteo = el.conteoResultados;
@@ -822,15 +984,23 @@
     });
 
     $('#btnReset').addEventListener('click', () => {
+      const alcance = enNube()
+        ? 'Se borrará el seguimiento de TODO EL EQUIPO en la base compartida (estatus, fechas y notas) y las '
+        : 'Se borrará todo el seguimiento guardado en este navegador (estatus, fechas y notas) y las ';
       abrirModal(
         'Restablecer datos iniciales',
-        'Se borrará todo el seguimiento guardado en este navegador (estatus, fechas y notas) y las ' +
-        estado.cuentas.length + ' cuentas volverán a su estado original. Esta acción no se puede deshacer. ' +
-        'Si quieres conservar el avance, cancela y exporta primero.',
+        alcance + estado.cuentas.length + ' cuentas volverán a su estado original. ' +
+        'Esta acción no se puede deshacer. Si quieres conservar el avance, cancela y exporta primero.',
         'Sí, restablecer',
         restablecer
       );
     });
+
+    // --- Acceso al tablero compartido ---
+    el.btnEntrar.addEventListener('click', intentarEntrar);
+    el.accesoClave.addEventListener('keydown', e => { if (e.key === 'Enter') intentarEntrar(); });
+    el.accesoNombre.addEventListener('keydown', e => { if (e.key === 'Enter') el.accesoClave.focus(); });
+    el.btnSalir.addEventListener('click', cerrarSesion);
     el.btnModalCancelar.addEventListener('click', cerrarModal);
     el.btnModalConfirmar.addEventListener('click', () => {
       const accion = accionModal;
@@ -854,10 +1024,13 @@
       return;
     }
     cachearNodos();
-    construirCuentas();
+    estado.modo = (window.NubeLCG && NubeLCG.configurado()) ? 'nube' : 'local';
+    estado.autor = leerNombre();
+    construirCuentas(enNube() ? {} : leerAlmacen());
     llenarFiltrosDinamicos();
     conectarEventos();
     renderTodo();
+    if (enNube()) arrancarNube();
   }
 
   document.addEventListener('DOMContentLoaded', iniciar);

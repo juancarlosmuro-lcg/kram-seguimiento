@@ -1,4 +1,4 @@
-# Seguimiento Comercial · London Consulting Group
+# KRAM · Seguimiento Comercial de Cuentas — London Consulting Group
 
 Herramienta web para dar seguimiento a la cartera de cuentas y prospectos comerciales.
 Es un sitio **100% estático**: no necesita servidor, base de datos ni Node.js. Se abre
@@ -12,16 +12,31 @@ en el Excel original.
 ## 1. Qué contiene el proyecto
 
 ```
-index.html      Estructura de la página
+index.html      Estructura de la página (incluye el logotipo LCG en línea)
 styles.css      Todo el diseño (tokens de marca LCG en el bloque :root)
 app.js          Toda la lógica (filtros, orden, KPIs, guardado, importar/exportar)
 data.js         Las 42 cuentas del Excel
-assets/         Logotipo y emblema oficiales de LCG
+config.js       Conexión a la base compartida (el único archivo que editas)
+nube.js         Capa que habla con Supabase (sesión, guardado, tiempo real)
+supabase.sql    Script para preparar la base (se corre una sola vez)
 README.md       Este archivo
 ```
 
-No hay dependencias externas salvo la tipografía **Manrope**, que se carga desde Google Fonts.
-Si no hay internet, la herramienta sigue funcionando con una tipografía de respaldo.
+## Dos modos de trabajo
+
+| | Modo local | Modo compartido |
+|---|---|---|
+| Cómo se activa | `config.js` vacío (así viene) | `config.js` con los datos de Supabase |
+| Dónde se guarda | En el navegador de cada persona | En la nube, para todo el equipo |
+| Quién ve los cambios | Solo quien los hizo | Todos, al instante y sin recargar |
+| Acceso | Abierto | Contraseña del equipo |
+
+La sección 9 explica cómo pasar de uno a otro. Todo lo demás funciona igual en los dos.
+
+Son cinco archivos sueltos, sin carpetas. El logotipo va incrustado dentro de `index.html`, así
+que no hay imágenes que subir por separado. La única dependencia externa es la tipografía
+**Manrope**, que se carga desde Google Fonts; sin internet la herramienta sigue funcionando con
+una tipografía de respaldo.
 
 ---
 
@@ -94,8 +109,9 @@ Pide confirmación y no se puede deshacer: exporta antes si quieres conservar el
 2. Ponle un nombre, por ejemplo `seguimiento-comercial-lcg`. Elige **Public** y crea el
    repositorio. (Con un repositorio *Private* necesitas GitHub Pro para publicar el sitio.)
 3. En la pantalla del repositorio vacío, haz clic en **uploading an existing file**.
-4. Arrastra `index.html`, `styles.css`, `app.js`, `data.js`, `README.md` **y la carpeta
-   `assets`** completa. Espera a que terminen de subir y haz clic en **Commit changes**.
+4. Arrastra todos los archivos: `index.html`, `styles.css`, `app.js`, `data.js`, `config.js`,
+   `nube.js`, `supabase.sql` y `README.md`. Espera a que terminen de subir y haz clic en
+   **Commit changes**.
 5. Ve a la pestaña **Settings** del repositorio y, en el menú de la izquierda, entra a **Pages**.
 6. En **Source** elige **Deploy from a branch**. En **Branch** selecciona **main** y la carpeta
    **/ (root)**. Haz clic en **Save**.
@@ -106,10 +122,17 @@ Pide confirmación y no se puede deshacer: exporta antes si quieres conservar el
    Esa es la URL pública que puedes compartir con el equipo.
 
 > Importante: todos los archivos deben quedar en la raíz del repositorio, con `index.html` al
-> mismo nivel que `styles.css`, `app.js` y `data.js`, y `assets` como subcarpeta.
+> mismo nivel que `styles.css`, `app.js` y `data.js`. Si al abrir el repositorio ves una carpeta
+> en lugar de los archivos, subiste la carpeta completa en vez de su contenido.
 
 Para actualizar el sitio después, sube los archivos nuevos al repositorio (Add file → Upload
 files) y GitHub Pages se refresca solo en un par de minutos.
+
+> Si cambias `styles.css`, `app.js` o `data.js`, abre también `index.html` en GitHub, haz clic en
+> el lápiz de editar y sube el número de versión en las tres líneas que dicen `?v=3` (déjalo en
+> `?v=4`, luego `?v=5`, y así). Eso obliga al navegador de todos a bajar el archivo nuevo en vez
+> de usar la copia que tiene guardada en caché. Sin ese cambio, la gente puede seguir viendo la
+> versión anterior hasta diez minutos.
 
 ---
 
@@ -154,10 +177,13 @@ Los colores, tipografías, tamaños, radios, sombras y espacios están centraliz
 Group: Verde Oscuro `#085E54`, Verde London `#03B585`, Mint `#BAF4E9` y Crema `#F2EEEB`.
 Cambiar un valor ahí actualiza toda la herramienta.
 
+El título y el subtítulo se editan directamente en `index.html`, en las líneas con las clases
+`portada__titulo` y `portada__subtitulo`.
+
 La tipografía de marca para cifras es DIN 2014. Como sus archivos son de licencia de prueba, no
 se incluyen: la variable `--font-numeric` ya la referencia y usa Manrope como respaldo. Cuando
-tengas los archivos con licencia, agrégalos en `assets/fonts/` con una regla `@font-face` y las
-cifras cambiarán solas.
+tengas los archivos con licencia, súbelos al repositorio y agrega una regla `@font-face` al
+inicio de `styles.css`; las cifras cambiarán solas.
 
 ---
 
@@ -168,3 +194,93 @@ pantallas chicas la tabla se convierte en tarjetas para que siga siendo legible.
 
 En Safari con navegación privada el navegador bloquea el almacenamiento local; en ese caso la
 herramienta lo avisa arriba y conviene exportar el seguimiento antes de cerrar.
+
+---
+
+## 9. Activar el modo compartido (seguimiento en vivo)
+
+Con esto, todo el equipo trabaja sobre la misma información: cuando alguien cambia un estatus,
+los demás lo ven aparecer en su pantalla sin recargar. Se usa **Supabase**, que tiene un plan
+gratuito de sobra para esta herramienta. Sigue el orden.
+
+### 9.1 Crea el proyecto
+
+1. Entra a [supabase.com](https://supabase.com) y haz clic en **Start your project**. Puedes
+   entrar con tu cuenta de GitHub.
+2. Haz clic en **New project**. Ponle de nombre `kram-seguimiento`.
+3. Te pedirá una **Database Password**. Genérala, cópiala y guárdala en un lugar seguro: es la
+   contraseña de administración de la base, **no** es la que usará el equipo.
+4. En **Region** elige la más cercana: *East US* o *West US* funcionan bien desde México.
+5. Haz clic en **Create new project** y espera dos o tres minutos a que termine de prepararse.
+
+### 9.2 Crea la tabla
+
+1. En el menú de la izquierda entra a **SQL Editor** y haz clic en **New query**.
+2. Abre el archivo `supabase.sql` de este proyecto, copia **todo** su contenido y pégalo ahí.
+3. Haz clic en **Run**. Debe decir *Success*. Si marca error, léelo: casi siempre es que se pegó
+   el texto incompleto.
+
+### 9.3 Crea el usuario del equipo
+
+Esta es la contraseña que vas a repartir.
+
+1. En el menú de la izquierda entra a **Authentication** → **Users**.
+2. Haz clic en **Add user** → **Create new user**.
+3. En **Email** escribe `equipo@kram-lcg.mx`. No necesita existir de verdad; es solo la identidad
+   interna a la que se liga la contraseña.
+4. En **Password** escribe la contraseña que usará el equipo. Que no sea trivial: mínimo diez
+   caracteres, con números.
+5. **Marca la casilla Auto Confirm User.** Si se te pasa, el usuario no podrá entrar.
+6. Haz clic en **Create user**.
+
+### 9.4 Copia las dos llaves
+
+1. En el menú de la izquierda, hasta abajo, entra a **Project Settings** → **API keys**
+   (en algunas cuentas aparece como **Data API**).
+2. Copia el valor de **Project URL**. Se ve así: `https://abcdefghijkl.supabase.co`
+3. Copia la llave **anon public**. Es un texto largo que empieza con `eyJ`. Es segura de
+   publicar: sin la contraseña del equipo no da acceso a nada, porque la tabla exige sesión
+   iniciada.
+
+### 9.5 Llena config.js
+
+Abre `config.js` en tu computadora con cualquier editor de texto y pega los valores entre las
+comillas:
+
+```js
+const SUPABASE_CONFIG = {
+  url: 'https://abcdefghijkl.supabase.co',
+  anonKey: 'eyJhbGciOi...(el texto largo completo)',
+  correoEquipo: 'equipo@kram-lcg.mx'
+};
+```
+
+Guárdalo. Si prefieres, también puedes editarlo directamente en GitHub con el ícono del lápiz.
+
+### 9.6 Sube los archivos y prueba
+
+1. Sube al repositorio `config.js`, `nube.js`, `index.html`, `app.js` y `styles.css`.
+2. Abre tu liga. Ahora aparece una pantalla pidiendo tu nombre y la contraseña del equipo.
+3. Entra, cambia el estatus de una cuenta y verifica que abajo diga "Guardado".
+4. Abre la misma liga en tu celular o en otra computadora, entra con la misma contraseña y
+   comprueba que ves ese cambio. Cambia algo ahí y observa cómo aparece solo en la primera
+   pantalla, sin recargar. Eso confirma que el tiempo real está funcionando.
+
+### 9.7 Reparte el acceso
+
+Manda a tu equipo la liga y la contraseña. Cada persona escribe su nombre la primera vez, y a
+partir de ahí la herramienta registra quién actualizó cada cuenta: se ve en el encabezado y en
+el panel de detalle. La sesión queda guardada en cada dispositivo, así que la contraseña se pide
+una sola vez; el botón **Salir** la vuelve a pedir.
+
+### Cosas que conviene tener claras
+
+- **Restablecer ahora borra el seguimiento de todos**, no solo el tuyo. El aviso de confirmación
+  lo advierte. Exporta antes.
+- **Si alguien deja el equipo**, cambia la contraseña en Supabase (Authentication → Users → los
+  tres puntos del usuario → Reset password) y repártela de nuevo.
+- **La base de cuentas sigue viviendo en `data.js`.** Agregar o quitar empresas se hace ahí,
+  igual que antes; la nube solo guarda estatus, fechas y notas.
+- **Si Supabase no responde**, la herramienta te lo dice en pantalla en lugar de fingir que
+  guardó. Exportar e importar siguen funcionando como respaldo.
+- **Para volver al modo local**, deja `url` y `anonKey` vacíos en `config.js`.

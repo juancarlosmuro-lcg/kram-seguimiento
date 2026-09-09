@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <!-- Al actualizar styles.css o app.js, sube el número de versión (?v=) para que
      el navegador baje el archivo nuevo y no la copia guardada en caché. -->
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
 
@@ -26,6 +26,7 @@
       <button class="btn btn--fantasma" id="btnExportarJson" type="button">Exportar JSON</button>
       <button class="btn btn--fantasma" id="btnImportar" type="button">Importar</button>
       <button class="btn btn--fantasma btn--riesgo" id="btnReset" type="button">Restablecer</button>
+      <button class="btn btn--fantasma" id="btnSalir" type="button" hidden>Salir</button>
       <input type="file" id="archivoImportar" accept=".csv,.json,text/csv,application/json" hidden>
     </div>
   </div>
@@ -233,10 +234,34 @@
   </div>
 </div>
 
+<!-- ================= PANTALLA DE ACCESO (solo en modo compartido) ================= -->
+<div class="acceso" id="acceso" hidden>
+  <div class="acceso__caja">
+    <p class="acceso__marca">London Consulting Group</p>
+    <h2 class="acceso__titulo">KRAM · Seguimiento Comercial</h2>
+    <p class="acceso__texto">Escribe la contraseña del equipo para ver y editar el seguimiento compartido.</p>
+
+    <div class="campo">
+      <label class="campo__label" for="accesoNombre">Tu nombre</label>
+      <input class="campo__control" type="text" id="accesoNombre" autocomplete="name" placeholder="Para saber quién actualizó cada cuenta">
+    </div>
+    <div class="campo">
+      <label class="campo__label" for="accesoClave">Contraseña del equipo</label>
+      <input class="campo__control" type="password" id="accesoClave" autocomplete="current-password">
+    </div>
+
+    <p class="acceso__error" id="accesoError" hidden></p>
+    <button class="btn acceso__btn" id="btnEntrar" type="button">Entrar</button>
+  </div>
+</div>
+
 <!-- ================= AVISOS ================= -->
 <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 
-<script src="data.js?v=3"></script>
-<script src="app.js?v=3"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js?v=4"></script>
+<script src="data.js?v=4"></script>
+<script src="nube.js?v=4"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>
