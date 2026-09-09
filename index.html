@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seguimiento Comercial · London Consulting Group</title>
+<meta name="description" content="Herramienta interna de seguimiento comercial de cuentas y prospectos — London Consulting Group.">
+<link rel="icon" href="assets/lcg-emblem.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="salto-contenido" href="#tabla-cuentas">Ir a la tabla de cuentas</a>
+
+<!-- ================= PORTADA / HEADER ================= -->
+<header class="portada">
+  <div class="contenedor portada__barra">
+    <img class="portada__logo" src="assets/lcg-logo-light.svg" alt="London Consulting Group">
+    <div class="portada__acciones">
+      <button class="btn btn--fantasma" id="btnExportarCsv" type="button">Exportar CSV</button>
+      <button class="btn btn--fantasma" id="btnExportarJson" type="button">Exportar JSON</button>
+      <button class="btn btn--fantasma" id="btnImportar" type="button">Importar</button>
+      <button class="btn btn--fantasma btn--riesgo" id="btnReset" type="button">Restablecer</button>
+      <input type="file" id="archivoImportar" accept=".csv,.json,text/csv,application/json" hidden>
+    </div>
+  </div>
+
+  <div class="contenedor portada__cuerpo">
+    <h1 class="portada__titulo">Seguimiento comercial</h1>
+    <p class="portada__lectura" id="lecturaEjecutiva"></p>
+    <p class="portada__meta" id="metaGuardado"></p>
+  </div>
+</header>
+
+<!-- ================= KPIs ================= -->
+<section class="contenedor kpis" aria-label="Indicadores principales">
+  <article class="kpi">
+    <p class="kpi__etiqueta">Total de cuentas</p>
+    <p class="kpi__valor" id="kpiTotal">0</p>
+    <p class="kpi__nota">Base completa de prospectos</p>
+  </article>
+  <article class="kpi kpi--acento">
+    <p class="kpi__etiqueta">Citas agendadas</p>
+    <p class="kpi__valor" id="kpiAgendadas">0</p>
+    <p class="kpi__nota">Agendadas o ya realizadas</p>
+  </article>
+  <article class="kpi">
+    <p class="kpi__etiqueta">Citas realizadas</p>
+    <p class="kpi__valor" id="kpiRealizadas">0</p>
+    <p class="kpi__nota">Reuniones ya efectuadas</p>
+  </article>
+  <article class="kpi">
+    <p class="kpi__etiqueta">Pendientes</p>
+    <p class="kpi__valor" id="kpiPendientes">0</p>
+    <p class="kpi__nota">Todavía sin cita conseguida</p>
+  </article>
+  <article class="kpi kpi--avance">
+    <p class="kpi__etiqueta">Avance</p>
+    <p class="kpi__valor" id="kpiAvance">0%</p>
+    <div class="barra" role="img" aria-labelledby="kpiAvance">
+      <div class="barra__relleno" id="barraAvance" style="width:0%"></div>
+    </div>
+  </article>
+</section>
+
+<main class="contenedor">
+
+  <!-- ================= RESÚMENES ================= -->
+  <div class="resumen__encabezado">
+    <h2 class="titulo-seccion">Cómo va la cartera</h2>
+    <button class="btn btn--texto" id="btnToggleResumen" type="button" aria-expanded="true">Ocultar resumen</button>
+  </div>
+
+  <section class="resumenes" id="bloqueResumen">
+    <article class="panel">
+      <h3 class="panel__titulo">Por zona</h3>
+      <div class="panel__cuerpo">
+        <table class="mini">
+          <thead>
+            <tr>
+              <th scope="col">Zona</th>
+              <th scope="col" class="num">Cuentas</th>
+              <th scope="col" class="num">Agendadas</th>
+              <th scope="col" class="num">Realizadas</th>
+              <th scope="col" class="num">Pendientes</th>
+              <th scope="col">Avance</th>
+            </tr>
+          </thead>
+          <tbody id="resumenZona"></tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="panel">
+      <h3 class="panel__titulo">Por clasificación</h3>
+      <div class="panel__cuerpo">
+        <table class="mini">
+          <thead>
+            <tr>
+              <th scope="col">Clasificación</th>
+              <th scope="col" class="num">Cuentas</th>
+              <th scope="col" class="num">Agendadas</th>
+              <th scope="col" class="num">Realizadas</th>
+              <th scope="col" class="num">Pendientes</th>
+              <th scope="col">Avance</th>
+            </tr>
+          </thead>
+          <tbody id="resumenClasificacion"></tbody>
+        </table>
+      </div>
+    </article>
+
+    <article class="panel panel--foco">
+      <h3 class="panel__titulo">Requieren seguimiento</h3>
+      <p class="panel__ayuda">Cuentas AAA y AA sin cita conseguida. Haz clic para abrir el detalle.</p>
+      <div class="panel__cuerpo panel__cuerpo--scroll">
+        <ul class="lista-foco" id="listaFoco"></ul>
+      </div>
+    </article>
+  </section>
+
+  <!-- ================= FILTROS ================= -->
+  <div class="filtros" id="tabla-cuentas">
+    <div class="campo campo--buscar">
+      <label class="campo__label" for="fBuscar">Buscar</label>
+      <input class="campo__control" type="search" id="fBuscar" placeholder="Empresa, contacto o correo" autocomplete="off">
+    </div>
+    <div class="campo">
+      <label class="campo__label" for="fClasificacion">Clasificación</label>
+      <select class="campo__control" id="fClasificacion">
+        <option value="">Todas</option>
+        <option value="AAA">AAA</option>
+        <option value="AA">AA</option>
+        <option value="A">A</option>
+      </select>
+    </div>
+    <div class="campo">
+      <label class="campo__label" for="fZona">Zona</label>
+      <select class="campo__control" id="fZona"><option value="">Todas</option></select>
+    </div>
+    <div class="campo">
+      <label class="campo__label" for="fIndustria">Industria</label>
+      <select class="campo__control" id="fIndustria"><option value="">Todas</option></select>
+    </div>
+    <div class="campo">
+      <label class="campo__label" for="fEstatus">Estatus</label>
+      <select class="campo__control" id="fEstatus"><option value="">Todos</option></select>
+    </div>
+    <div class="filtros__pie">
+      <p class="filtros__conteo" id="conteoResultados"></p>
+      <button class="btn btn--texto" id="btnLimpiar" type="button">Limpiar filtros</button>
+    </div>
+  </div>
+
+  <!-- ================= TABLA ================= -->
+  <div class="tabla-marco">
+    <table class="tabla" id="tablaCuentas">
+      <thead>
+        <tr>
+          <th scope="col" class="orden" tabindex="0" role="button" data-orden="empresa">Empresa</th>
+          <th scope="col" class="orden" tabindex="0" role="button" data-orden="clasificacion">Clasif.</th>
+          <th scope="col" class="orden" tabindex="0" role="button" data-orden="estado">Estado</th>
+          <th scope="col" class="orden" tabindex="0" role="button" data-orden="zona">Zona</th>
+          <th scope="col" class="orden" tabindex="0" role="button" data-orden="industria">Industria</th>
+          <th scope="col">Contacto</th>
+          <th scope="col">Cargo</th>
+          <th scope="col">Teléfono</th>
+          <th scope="col">Correo</th>
+          <th scope="col" class="orden" tabindex="0" role="button" data-orden="estatus">Estatus de cita</th>
+          <th scope="col" class="orden" tabindex="0" role="button" data-orden="fechaCita">Fecha de consecución</th>
+          <th scope="col"><span class="sr">Detalle</span></th>
+        </tr>
+      </thead>
+      <tbody id="cuerpoTabla"></tbody>
+    </table>
+    <p class="vacio" id="mensajeVacio" hidden>Ninguna cuenta coincide con estos filtros. Ajusta la búsqueda o límpialos.</p>
+  </div>
+
+  <footer class="pie">
+    <p>London Consulting Group · Herramienta interna de seguimiento comercial.</p>
+    <p>Los cambios se guardan en este navegador. Exporta el seguimiento para respaldarlo o compartirlo.</p>
+  </footer>
+</main>
+
+<!-- ================= DRAWER DE DETALLE ================= -->
+<div class="velo" id="velo" hidden></div>
+
+<aside class="cajon" id="cajon" hidden aria-labelledby="cajonEmpresa" role="dialog" aria-modal="true">
+  <header class="cajon__cabecera">
+    <div>
+      <p class="cajon__clasif" id="cajonClasif"></p>
+      <h2 class="cajon__titulo" id="cajonEmpresa"></h2>
+    </div>
+    <button class="btn-cerrar" id="btnCerrarCajon" type="button" aria-label="Cerrar detalle">&times;</button>
+  </header>
+
+  <div class="cajon__cuerpo">
+    <h3 class="cajon__subtitulo">Datos de la cuenta</h3>
+    <dl class="datos" id="cajonDatos"></dl>
+
+    <h3 class="cajon__subtitulo">Seguimiento</h3>
+    <div class="campo">
+      <label class="campo__label" for="cajonEstatus">Estatus de cita</label>
+      <select class="campo__control" id="cajonEstatus"></select>
+    </div>
+    <div class="campo">
+      <label class="campo__label" for="cajonFecha">Fecha de consecución de cita</label>
+      <input class="campo__control" type="date" id="cajonFecha">
+      <p class="campo__ayuda">Déjala vacía mientras no exista una cita.</p>
+    </div>
+    <div class="campo">
+      <label class="campo__label" for="cajonNotas">Notas</label>
+      <textarea class="campo__control" id="cajonNotas" rows="4" placeholder="Acuerdos, siguiente paso, quién atendió…"></textarea>
+    </div>
+  </div>
+</aside>
+
+<!-- ================= MODAL DE CONFIRMACIÓN ================= -->
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitulo">
+  <div class="modal__caja">
+    <h2 class="modal__titulo" id="modalTitulo">Restablecer datos iniciales</h2>
+    <p class="modal__texto" id="modalTexto"></p>
+    <div class="modal__acciones">
+      <button class="btn btn--fantasma" id="btnModalCancelar" type="button">Cancelar</button>
+      <button class="btn btn--peligro" id="btnModalConfirmar" type="button">Sí, restablecer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= AVISOS ================= -->
+<div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
