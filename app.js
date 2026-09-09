@@ -652,6 +652,21 @@
     return String(contacto).trim().split(/\s+/)[0];
   }
 
+  /* --- Negritas ---------------------------------------------------------
+     En las plantillas se marcan con **dobles asteriscos**. De ahí salen tres
+     formas: la de WhatsApp (*un asterisco*, que es su formato nativo), la de
+     texto plano (sin marcas) y la de HTML (negritas reales al portapapeles). */
+  const RE_NEGRITA = /\*\*([^*\n]+)\*\*/g;
+
+  const aWhatsapp = t => String(t).replace(RE_NEGRITA, '*$1*');
+  const sinMarcas = t => String(t).replace(RE_NEGRITA, '$1');
+
+  function aHtml(texto) {
+    return '<div>' + escapar(texto)
+      .replace(RE_NEGRITA, '<b>$1</b>')
+      .split('\n').join('<br>') + '</div>';
+  }
+
   /** Sustituye las etiquetas de la plantilla con los datos de la cuenta. */
   function armarMensaje(plantilla, c) {
     return String(plantilla)
@@ -700,30 +715,65 @@
     if (!esVacio(c.correo)) partes.push(c.correo);
     el.msjFicha.textContent = partes.length ? partes.join(' · ') : 'Sin datos de contacto en la base.';
 
-    el.msjWhats.value = armarMensaje(PLANTILLAS.whatsapp, c);
-    el.msjAsunto.value = armarMensaje(PLANTILLAS.correoAsunto, c);
+    el.msjWhats.value = aWhatsapp(armarMensaje(PLANTILLAS.whatsapp, c));
+    el.msjAsunto.value = sinMarcas(armarMensaje(PLANTILLAS.correoAsunto, c));
     el.msjCorreo.value = armarMensaje(PLANTILLAS.correoCuerpo, c);
     estadoAccionesMensaje(c);
   }
 
-  /** Copia al portapapeles con respaldo para navegadores viejos. */
-  function copiarTexto(campo) {
-    const texto = campo.value;
-    const respaldo = () => {
-      campo.focus();
-      campo.select();
-      try { document.execCommand('copy'); } catch (e) { /* sin portapapeles */ }
-      campo.setSelectionRange(0, 0);
-      campo.blur();
-    };
+  /** Copia con formato real: usa un contenedor oculto y el portapapeles del sistema. */
+  function copiarHtmlRespaldo(html) {
+    const caja = document.createElement('div');
+    caja.contentEditable = 'true';
+    caja.innerHTML = html;
+    caja.setAttribute('style', 'position:fixed;left:-9999px;top:0;white-space:pre-wrap;');
+    document.body.appendChild(caja);
+    const rango = document.createRange();
+    rango.selectNodeContents(caja);
+    const seleccion = window.getSelection();
+    seleccion.removeAllRanges();
+    seleccion.addRange(rango);
+    try { document.execCommand('copy'); } catch (e) { /* sin portapapeles */ }
+    seleccion.removeAllRanges();
+    document.body.removeChild(caja);
+  }
+
+  function copiarPlanoRespaldo(campo) {
+    campo.focus();
+    campo.select();
+    try { document.execCommand('copy'); } catch (e) { /* sin portapapeles */ }
+    campo.setSelectionRange(0, 0);
+    campo.blur();
+  }
+
+  /**
+   * Copia al portapapeles. Con formato "html" (el correo) se copian negritas
+   * reales y, como respaldo, el mismo texto sin los asteriscos.
+   */
+  function copiarTexto(campo, formato) {
+    const crudo = campo.value;
+    const plano = sinMarcas(crudo);
+    const listo = () => aviso('Mensaje copiado');
+
+    if (formato === 'html') {
+      const html = aHtml(crudo);
+      if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+        navigator.clipboard.write([new ClipboardItem({
+          'text/html': new Blob([html], { type: 'text/html' }),
+          'text/plain': new Blob([plano], { type: 'text/plain' })
+        })]).then(listo, () => { copiarHtmlRespaldo(html); listo(); });
+      } else {
+        copiarHtmlRespaldo(html);
+        listo();
+      }
+      return;
+    }
+
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(texto).then(
-        () => aviso('Mensaje copiado'),
-        () => { respaldo(); aviso('Mensaje copiado'); }
-      );
+      navigator.clipboard.writeText(plano).then(listo, () => { copiarPlanoRespaldo(campo); listo(); });
     } else {
-      respaldo();
-      aviso('Mensaje copiado');
+      copiarPlanoRespaldo(campo);
+      listo();
     }
   }
 
@@ -1119,7 +1169,7 @@
     // --- Enviar mensaje ---
     el.msjEmpresa.addEventListener('change', () => generarMensajes(el.msjEmpresa.value));
     document.querySelectorAll('[data-copiar]').forEach(boton => {
-      boton.addEventListener('click', () => copiarTexto(el[boton.dataset.copiar]));
+      boton.addEventListener('click', () => copiarTexto(el[boton.dataset.copiar], boton.dataset.formato));
     });
     el.btnPrepararMensaje.addEventListener('click', prepararMensajeDesdeCajon);
 

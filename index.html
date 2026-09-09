@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <!-- Al actualizar styles.css o app.js, sube el número de versión (?v=) para que
      el navegador baje el archivo nuevo y no la copia guardada en caché. -->
-<link rel="stylesheet" href="styles.css?v=7">
+<link rel="stylesheet" href="styles.css?v=8">
 </head>
 <body>
 
@@ -158,14 +158,14 @@
           </div>
         </header>
         <textarea class="copia__texto" id="msjWhats" rows="14" spellcheck="false" aria-label="Mensaje de WhatsApp"></textarea>
-        <p class="copia__pie">Más personal y breve. Puedes editarlo antes de copiar.</p>
+        <p class="copia__pie">Más personal y breve. Lo que va <b>*entre asteriscos*</b> es el formato de negritas de WhatsApp: se ve en negritas al enviarlo.</p>
       </article>
 
       <article class="copia">
         <header class="copia__cabecera">
           <h3 class="copia__titulo">Correo</h3>
           <div class="copia__acciones">
-            <button class="btn btn--chico" type="button" data-copiar="msjCorreo">Copiar mensaje</button>
+            <button class="btn btn--chico" type="button" data-copiar="msjCorreo" data-formato="html">Copiar mensaje</button>
           </div>
         </header>
         <div class="campo copia__asunto">
@@ -176,7 +176,7 @@
           </div>
         </div>
         <textarea class="copia__texto" id="msjCorreo" rows="14" spellcheck="false" aria-label="Mensaje de correo"></textarea>
-        <p class="copia__pie">Más ejecutivo, con el caso completo. Puedes editarlo antes de copiar.</p>
+        <p class="copia__pie">Más ejecutivo, con el caso completo. Lo que va entre <b>**dobles asteriscos**</b> se copia en negritas reales, listo para pegar en el correo.</p>
       </article>
     </div>
   </section>
@@ -321,10 +321,10 @@
 <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js?v=7"></script>
-<script src="data.js?v=7"></script>
-<script src="mensajes.js?v=7"></script>
-<script src="nube.js?v=7"></script>
-<script src="app.js?v=7"></script>
+<script src="config.js?v=8"></script>
+<script src="data.js?v=8"></script>
+<script src="mensajes.js?v=8"></script>
+<script src="nube.js?v=8"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>
