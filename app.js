@@ -314,6 +314,10 @@
       .sort((a, b) => (PRIORIDAD[b.clasificacion] - PRIORIDAD[a.clasificacion]) ||
                       a.empresa.localeCompare(b.empresa, 'es'));
 
+    el.ayudaFoco.textContent = foco.length
+      ? foco.length + ' cuentas AAA y AA sin cita conseguida. Haz clic para abrir el detalle.'
+      : 'Sin pendientes en las cuentas de mayor prioridad.';
+
     if (!foco.length) {
       el.listaFoco.innerHTML = '<li class="lista-foco__vacio">No hay cuentas AAA ni AA pendientes de cita.</li>';
       return;
@@ -362,25 +366,25 @@
           (c.notas ? '<span class="marca-nota" title="Tiene notas"></span>' : '') +
         '</span>' +
       '</td>' +
-      '<td data-label="Clasificación"><span class="clasif clasif--' + c.clasificacion + '">' + escapar(c.clasificacion) + '</span></td>' +
-      '<td data-label="Estado">' + textoSimple(c.estado) + '</td>' +
-      '<td data-label="Zona">' + textoSimple(c.zona) + '</td>' +
-      '<td data-label="Industria">' + textoSimple(c.industria) + '</td>' +
-      '<td class="celda-contacto" data-label="Contacto">' + textoSimple(c.contacto) + '</td>' +
-      '<td class="celda-cargo" data-label="Cargo">' + textoSimple(c.cargo) + '</td>' +
-      '<td class="celda-tel" data-label="Teléfono">' + celdaTelefono(c) + '</td>' +
-      '<td class="celda-correo" data-label="Correo">' + celdaCorreo(c) + '</td>' +
-      '<td data-label="Estatus de cita">' +
+      '<td class="c-clasif" data-label="Clasificación"><span class="clasif clasif--' + c.clasificacion + '">' + escapar(c.clasificacion) + '</span></td>' +
+      '<td class="c-estado" data-label="Estado">' + textoSimple(c.estado) + '</td>' +
+      '<td class="c-zona" data-label="Zona">' + textoSimple(c.zona) + '</td>' +
+      '<td class="c-industria" data-label="Industria">' + textoSimple(c.industria) + '</td>' +
+      '<td class="celda-contacto c-contacto" data-label="Contacto">' + textoSimple(c.contacto) + '</td>' +
+      '<td class="celda-cargo c-cargo" data-label="Cargo">' + textoSimple(c.cargo) + '</td>' +
+      '<td class="celda-tel c-tel" data-label="Teléfono">' + celdaTelefono(c) + '</td>' +
+      '<td class="celda-correo c-correo" data-label="Correo">' + celdaCorreo(c) + '</td>' +
+      '<td class="c-estatus" data-label="Estatus">' +
         '<select class="pill-estatus ' + claseEstatus(c.estatus) + '" data-accion="estatus" ' +
           'aria-label="Estatus de ' + escapar(c.empresa) + '">' + opcionesEstatus(c.estatus) + '</select>' +
       '</td>' +
-      '<td data-label="Fecha de consecución">' +
+      '<td class="c-fecha" data-label="Fecha de cita">' +
         '<input type="date" class="fecha-inline' + (faltaFecha(c) ? ' fecha-inline--alerta' : '') + '" ' +
           'data-accion="fecha" value="' + escapar(c.fechaCita) + '" ' +
           'title="' + (faltaFecha(c) ? 'Cita conseguida sin fecha registrada' : 'Fecha de consecución de la cita') + '" ' +
           'aria-label="Fecha de cita de ' + escapar(c.empresa) + '">' +
       '</td>' +
-      '<td class="celda-accion" data-label=""><button class="btn-detalle" type="button" data-accion="detalle">Detalle</button></td>' +
+      '<td class="celda-accion c-detalle" data-label=""><button class="btn-detalle" type="button" data-accion="detalle" title="Ver ficha completa">Ver</button></td>' +
     '</tr>';
   }
 
@@ -622,6 +626,143 @@
     el.cajon.hidden = true;
     el.velo.hidden = true;
     if (ultimoFoco && document.contains(ultimoFoco)) ultimoFoco.focus();
+  }
+
+  /* ============ 7b. MENSAJES PARA WHATSAPP Y CORREO ============ */
+
+  const SIN_NOMBRE = '[nombre del contacto]';
+
+  /** Primera palabra del nombre, para un saludo natural en WhatsApp. */
+  function primerNombre(contacto) {
+    if (esVacio(contacto)) return SIN_NOMBRE;
+    return String(contacto).trim().split(/\s+/)[0];
+  }
+
+  /** Sustituye las etiquetas de la plantilla con los datos de la cuenta. */
+  function armarMensaje(plantilla, c) {
+    return String(plantilla)
+      .split('[Primer nombre]').join(primerNombre(c.contacto))
+      .split('[Nombre contacto]').join(esVacio(c.contacto) ? SIN_NOMBRE : c.contacto)
+      .split('[Nombre empresa]').join(c.empresa)
+      .split('[Cargo]').join(esVacio(c.cargo) ? '[cargo]' : c.cargo);
+  }
+
+  /** Teléfono mexicano de 10 dígitos -> enlace de WhatsApp. */
+  function telefonoWhatsapp(telefono) {
+    if (esVacio(telefono)) return '';
+    const digitos = String(telefono).replace(/\D/g, '');
+    if (digitos.length === 10) return '52' + digitos;
+    if (digitos.length === 12 && digitos.indexOf('52') === 0) return digitos;
+    if (digitos.length === 13 && digitos.indexOf('521') === 0) return digitos;
+    return digitos || '';
+  }
+
+  function llenarSelectorEmpresas() {
+    const ordenadas = estado.cuentas.slice().sort((a, b) => a.empresa.localeCompare(b.empresa, 'es'));
+    el.msjEmpresa.innerHTML = '<option value="">Selecciona una empresa…</option>' +
+      ordenadas.map(c => '<option value="' + escapar(c.id) + '">' + escapar(c.empresa) + '</option>').join('');
+  }
+
+  /** Deja los botones de enviar/copiar en un estado coherente. */
+  function estadoAccionesMensaje(c) {
+    const hayCuenta = !!c;
+    el.msjWhats.disabled = !hayCuenta;
+    el.msjCorreo.disabled = !hayCuenta;
+    el.msjAsunto.disabled = !hayCuenta;
+    document.querySelectorAll('[data-copiar]').forEach(b => { b.disabled = !hayCuenta; });
+
+    const tel = hayCuenta ? telefonoWhatsapp(c.telefono) : '';
+    if (tel) {
+      el.msjWhatsLink.href = 'https://wa.me/' + tel + '?text=' + encodeURIComponent(el.msjWhats.value);
+      el.msjWhatsLink.classList.remove('btn--inactivo');
+      el.msjWhatsLink.removeAttribute('aria-disabled');
+      el.msjWhatsLink.title = 'Abrir la conversación con ' + c.telefono;
+    } else {
+      el.msjWhatsLink.removeAttribute('href');
+      el.msjWhatsLink.classList.add('btn--inactivo');
+      el.msjWhatsLink.setAttribute('aria-disabled', 'true');
+      el.msjWhatsLink.title = hayCuenta ? 'Esta cuenta no tiene teléfono registrado' : '';
+    }
+
+    const correo = hayCuenta && !esVacio(c.correo) ? c.correo : '';
+    if (correo) {
+      el.msjCorreoLink.href = 'mailto:' + correo +
+        '?subject=' + encodeURIComponent(el.msjAsunto.value) +
+        '&body=' + encodeURIComponent(el.msjCorreo.value);
+      el.msjCorreoLink.classList.remove('btn--inactivo');
+      el.msjCorreoLink.removeAttribute('aria-disabled');
+      el.msjCorreoLink.title = 'Escribir a ' + correo;
+    } else {
+      el.msjCorreoLink.removeAttribute('href');
+      el.msjCorreoLink.classList.add('btn--inactivo');
+      el.msjCorreoLink.setAttribute('aria-disabled', 'true');
+      el.msjCorreoLink.title = hayCuenta ? 'Esta cuenta no tiene correo registrado' : '';
+    }
+  }
+
+  /** Genera los dos mensajes para la cuenta elegida. */
+  function generarMensajes(id) {
+    const c = obtener(id);
+
+    if (!c) {
+      el.msjContacto.innerHTML = '<option value="">—</option>';
+      el.msjFicha.textContent = 'Elige una empresa para generar los mensajes.';
+      el.msjWhats.value = '';
+      el.msjAsunto.value = '';
+      el.msjCorreo.value = '';
+      estadoAccionesMensaje(null);
+      return;
+    }
+
+    // Hoy cada cuenta tiene un contacto; el selector queda listo para más.
+    el.msjContacto.innerHTML = '<option value="' + escapar(c.contacto) + '">' +
+      (esVacio(c.contacto) ? 'Sin contacto registrado' : escapar(c.contacto)) + '</option>';
+
+    const partes = [];
+    if (!esVacio(c.cargo)) partes.push(c.cargo);
+    if (!esVacio(c.telefono)) partes.push(c.telefono);
+    if (!esVacio(c.correo)) partes.push(c.correo);
+    el.msjFicha.textContent = partes.length ? partes.join(' · ') : 'Sin datos de contacto en la base.';
+
+    el.msjWhats.value = armarMensaje(PLANTILLAS.whatsapp, c);
+    el.msjAsunto.value = armarMensaje(PLANTILLAS.correoAsunto, c);
+    el.msjCorreo.value = armarMensaje(PLANTILLAS.correoCuerpo, c);
+    estadoAccionesMensaje(c);
+  }
+
+  /** Copia al portapapeles con respaldo para navegadores viejos. */
+  function copiarTexto(campo) {
+    const texto = campo.value;
+    const respaldo = () => {
+      campo.focus();
+      campo.select();
+      try { document.execCommand('copy'); } catch (e) { /* sin portapapeles */ }
+      campo.setSelectionRange(0, 0);
+      campo.blur();
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(
+        () => aviso('Mensaje copiado'),
+        () => { respaldo(); aviso('Mensaje copiado'); }
+      );
+    } else {
+      respaldo();
+      aviso('Mensaje copiado');
+    }
+  }
+
+  /** Desde el cajón: prepara el mensaje de esa cuenta y baja a la sección. */
+  function prepararMensajeDesdeCajon() {
+    if (!estado.idAbierto) return;
+    el.msjEmpresa.value = estado.idAbierto;
+    generarMensajes(estado.idAbierto);
+    el.bloqueMensajes.hidden = false;
+    el.btnToggleMensajes.textContent = 'Ocultar';
+    cerrarCajon();
+    if (el.bloqueMensajes.scrollIntoView) {
+      el.bloqueMensajes.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    el.msjWhats.focus();
   }
 
   /* ============ 8. EXPORTAR / IMPORTAR / RESTABLECER ============ */
@@ -884,11 +1025,13 @@
   function cachearNodos() {
     const ids = ['lecturaEjecutiva', 'metaGuardado', 'kpiTotal', 'kpiAgendadas', 'kpiRealizadas',
       'kpiPendientes', 'kpiAvance', 'barraAvance', 'resumenZona', 'resumenClasificacion',
-      'listaFoco', 'cuerpoTabla', 'mensajeVacio', 'conteoResultados', 'aviso', 'cajon', 'velo',
+      'listaFoco', 'ayudaFoco', 'cuerpoTabla', 'mensajeVacio', 'conteoResultados', 'aviso', 'cajon', 'velo',
       'cajonEmpresa', 'cajonClasif', 'cajonDatos', 'cajonEstatus', 'cajonFecha', 'cajonNotas',
       'btnCerrarCajon', 'modal', 'modalTitulo', 'modalTexto', 'btnModalCancelar', 'btnModalConfirmar',
       'archivoImportar', 'fBuscar', 'fClasificacion', 'fZona', 'fIndustria', 'fEstatus',
-      'acceso', 'accesoNombre', 'accesoClave', 'accesoError', 'btnEntrar', 'btnSalir'];
+      'acceso', 'accesoNombre', 'accesoClave', 'accesoError', 'btnEntrar', 'btnSalir',
+      'bloqueMensajes', 'btnToggleMensajes', 'msjEmpresa', 'msjContacto', 'msjFicha',
+      'msjWhats', 'msjAsunto', 'msjCorreo', 'msjWhatsLink', 'msjCorreoLink', 'btnPrepararMensaje'];
     ids.forEach(id => { el[id] = document.getElementById(id); });
     el.lectura = el.lecturaEjecutiva;
     el.conteo = el.conteoResultados;
@@ -996,6 +1139,24 @@
       );
     });
 
+    // --- Enviar mensaje ---
+    el.msjEmpresa.addEventListener('change', () => generarMensajes(el.msjEmpresa.value));
+    document.querySelectorAll('[data-copiar]').forEach(boton => {
+      boton.addEventListener('click', () => copiarTexto(el[boton.dataset.copiar]));
+    });
+    // Al editar un mensaje, los enlaces de WhatsApp y correo llevan el texto actual.
+    [el.msjWhats, el.msjAsunto, el.msjCorreo].forEach(campo => {
+      campo.addEventListener('input', () => estadoAccionesMensaje(obtener(el.msjEmpresa.value)));
+    });
+    el.btnPrepararMensaje.addEventListener('click', prepararMensajeDesdeCajon);
+
+    el.btnToggleMensajes.addEventListener('click', () => {
+      const oculto = !el.bloqueMensajes.hidden;
+      el.bloqueMensajes.hidden = oculto;
+      el.btnToggleMensajes.textContent = oculto ? 'Mostrar' : 'Ocultar';
+      el.btnToggleMensajes.setAttribute('aria-expanded', String(!oculto));
+    });
+
     // --- Acceso al tablero compartido ---
     el.btnEntrar.addEventListener('click', intentarEntrar);
     el.accesoClave.addEventListener('keydown', e => { if (e.key === 'Enter') intentarEntrar(); });
@@ -1018,6 +1179,9 @@
   }
 
   function iniciar() {
+    if (typeof PLANTILLAS === 'undefined') {
+      window.PLANTILLAS = { whatsapp: '', correoAsunto: '', correoCuerpo: '' };
+    }
     if (typeof CUENTAS_INICIALES === 'undefined' || !Array.isArray(CUENTAS_INICIALES)) {
       document.body.innerHTML = '<p style="padding:32px">No se pudo cargar data.js. ' +
         'Verifica que el archivo esté junto a index.html.</p>';
@@ -1028,7 +1192,9 @@
     estado.autor = leerNombre();
     construirCuentas(enNube() ? {} : leerAlmacen());
     llenarFiltrosDinamicos();
+    llenarSelectorEmpresas();
     conectarEventos();
+    generarMensajes('');
     renderTodo();
     if (enNube()) arrancarNube();
   }

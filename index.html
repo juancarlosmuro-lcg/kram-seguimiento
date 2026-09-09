@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <!-- Al actualizar styles.css o app.js, sube el número de versión (?v=) para que
      el navegador baje el archivo nuevo y no la copia guardada en caché. -->
-<link rel="stylesheet" href="styles.css?v=4">
+<link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
 
@@ -119,11 +119,65 @@
 
     <article class="panel panel--foco">
       <h3 class="panel__titulo">Requieren seguimiento</h3>
-      <p class="panel__ayuda">Cuentas AAA y AA sin cita conseguida. Haz clic para abrir el detalle.</p>
+      <p class="panel__ayuda" id="ayudaFoco">Cuentas AAA y AA sin cita conseguida.</p>
       <div class="panel__cuerpo panel__cuerpo--scroll">
         <ul class="lista-foco" id="listaFoco"></ul>
       </div>
     </article>
+  </section>
+
+
+  <!-- ================= ENVIAR MENSAJE ================= -->
+  <div class="resumen__encabezado">
+    <h2 class="titulo-seccion">Enviar mensaje</h2>
+    <button class="btn btn--texto" id="btnToggleMensajes" type="button" aria-expanded="true">Ocultar</button>
+  </div>
+
+  <section class="panel mensajes" id="bloqueMensajes">
+    <div class="mensajes__selector">
+      <div class="campo">
+        <label class="campo__label" for="msjEmpresa">Empresa</label>
+        <select class="campo__control" id="msjEmpresa"></select>
+      </div>
+      <div class="campo">
+        <label class="campo__label" for="msjContacto">Contacto</label>
+        <select class="campo__control" id="msjContacto"></select>
+      </div>
+      <p class="mensajes__ficha" id="msjFicha">Elige una empresa para generar los mensajes.</p>
+    </div>
+
+    <div class="mensajes__copias">
+      <article class="copia">
+        <header class="copia__cabecera">
+          <h3 class="copia__titulo">WhatsApp</h3>
+          <div class="copia__acciones">
+            <button class="btn btn--chico" type="button" data-copiar="msjWhats">Copiar mensaje</button>
+            <a class="btn btn--chico btn--claro" id="msjWhatsLink" target="_blank" rel="noopener">Abrir WhatsApp</a>
+          </div>
+        </header>
+        <textarea class="copia__texto" id="msjWhats" rows="14" spellcheck="false" aria-label="Mensaje de WhatsApp"></textarea>
+        <p class="copia__pie">Más personal y breve. Puedes editarlo antes de copiar.</p>
+      </article>
+
+      <article class="copia">
+        <header class="copia__cabecera">
+          <h3 class="copia__titulo">Correo</h3>
+          <div class="copia__acciones">
+            <button class="btn btn--chico" type="button" data-copiar="msjCorreo">Copiar mensaje</button>
+            <a class="btn btn--chico btn--claro" id="msjCorreoLink">Abrir correo</a>
+          </div>
+        </header>
+        <div class="campo copia__asunto">
+          <label class="campo__label" for="msjAsunto">Asunto</label>
+          <div class="copia__asunto-fila">
+            <input class="campo__control" type="text" id="msjAsunto" spellcheck="false">
+            <button class="btn btn--chico btn--claro" type="button" data-copiar="msjAsunto">Copiar</button>
+          </div>
+        </div>
+        <textarea class="copia__texto" id="msjCorreo" rows="14" spellcheck="false" aria-label="Mensaje de correo"></textarea>
+        <p class="copia__pie">Más ejecutivo, con el caso completo. Puedes editarlo antes de copiar.</p>
+      </article>
+    </div>
   </section>
 
   <!-- ================= FILTROS ================= -->
@@ -164,18 +218,18 @@
     <table class="tabla" id="tablaCuentas">
       <thead>
         <tr>
-          <th scope="col" class="orden" tabindex="0" role="button" data-orden="empresa">Empresa</th>
-          <th scope="col" class="orden" tabindex="0" role="button" data-orden="clasificacion">Clasif.</th>
-          <th scope="col" class="orden" tabindex="0" role="button" data-orden="estado">Estado</th>
-          <th scope="col" class="orden" tabindex="0" role="button" data-orden="zona">Zona</th>
-          <th scope="col" class="orden" tabindex="0" role="button" data-orden="industria">Industria</th>
-          <th scope="col">Contacto</th>
-          <th scope="col">Cargo</th>
-          <th scope="col">Teléfono</th>
-          <th scope="col">Correo</th>
-          <th scope="col" class="orden" tabindex="0" role="button" data-orden="estatus">Estatus de cita</th>
-          <th scope="col" class="orden" tabindex="0" role="button" data-orden="fechaCita">Fecha de consecución</th>
-          <th scope="col"><span class="sr">Detalle</span></th>
+          <th scope="col" class="orden c-empresa" tabindex="0" role="button" data-orden="empresa">Empresa</th>
+          <th scope="col" class="orden c-clasif" tabindex="0" role="button" data-orden="clasificacion">Clasif.</th>
+          <th scope="col" class="orden c-estado" tabindex="0" role="button" data-orden="estado">Estado</th>
+          <th scope="col" class="orden c-zona" tabindex="0" role="button" data-orden="zona">Zona</th>
+          <th scope="col" class="orden c-industria" tabindex="0" role="button" data-orden="industria">Industria</th>
+          <th scope="col" class="c-contacto">Contacto</th>
+          <th scope="col" class="c-cargo">Cargo</th>
+          <th scope="col" class="c-tel">Teléfono</th>
+          <th scope="col" class="c-correo">Correo</th>
+          <th scope="col" class="orden c-estatus" tabindex="0" role="button" data-orden="estatus">Estatus</th>
+          <th scope="col" class="orden c-fecha" tabindex="0" role="button" data-orden="fechaCita">Fecha de cita</th>
+          <th scope="col" class="c-detalle"><span class="sr">Detalle</span></th>
         </tr>
       </thead>
       <tbody id="cuerpoTabla"></tbody>
@@ -219,6 +273,8 @@
       <label class="campo__label" for="cajonNotas">Notas</label>
       <textarea class="campo__control" id="cajonNotas" rows="4" placeholder="Acuerdos, siguiente paso, quién atendió…"></textarea>
     </div>
+
+    <button class="btn btn--claro cajon__btn" id="btnPrepararMensaje" type="button">Preparar mensaje para esta cuenta</button>
   </div>
 </aside>
 
@@ -236,8 +292,13 @@
 
 <!-- ================= PANTALLA DE ACCESO (solo en modo compartido) ================= -->
 <div class="acceso" id="acceso" hidden>
+  <div class="acceso__logos">
+    <svg class="acceso__logo-lcg" role="img" aria-label="London Consulting Group" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1911.32 229.94"><path d="M1811.19,168.91c5.5,0,10,4.51,10,10s-4.51,10-10,10-10-4.51-10-10,4.51-10,10-10ZM1811.19,186.66c4.27,0,7.75-3.48,7.75-7.75s-3.48-7.75-7.75-7.75-7.75,3.48-7.75,7.75,3.48,7.75,7.75,7.75ZM1807.16,183.93v-10.32h4.23c2.85,0,3.84,1.7,3.84,3.12,0,1.62-.83,2.61-2.21,3.08l2.73,4.11h-2.33l-2.53-3.84h-1.66v3.84h-2.06ZM1810.96,178.36c1.54,0,2.21-.47,2.21-1.58,0-.95-.71-1.38-2.02-1.38h-1.94v2.96h1.74Z"/><g><path d="M1270.17,108.98c0-60.19-48.44-108.98-108.19-108.98s-108.19,48.79-108.19,108.98,48.44,109,108.19,109,108.19-48.79,108.19-109Z"/><path d="M463.75,108.98c0-60.19-48.44-108.98-108.19-108.98s-108.19,48.79-108.19,108.98,48.44,109,108.19,109,108.19-48.79,108.19-109Z"/><path d="M828.53,217.98c59.75,0,108.19-48.79,108.19-109S888.28,0,828.53,0"/><path d="M217.96,217.98H9.8C4.39,217.98,0,213.59,0,208.18V0"/><path d="M493.3,0h208.16c5.41,0,9.8,4.39,9.8,9.8v208.18"/><path d="M1299.47,0h208.16c5.41,0,9.8,4.39,9.8,9.8v208.18"/><g><path d="M1641.8,46.76h21.01v4.97h-26.5V7.79h5.48v38.98Z"/><path d="M1691.86,37.85c0,8.28-4.08,14.39-13.25,14.39-8.47,0-13.25-5.6-13.25-14.39v-4.21c0-9.04,4.9-14.27,13.25-14.27s13.25,5.16,13.25,14.27v4.21ZM1686.77,37.85v-4.21c0-6.05-2.93-9.68-8.15-9.68s-8.15,3.69-8.15,9.68v4.21c0,5.48,2.29,9.81,8.15,9.81,5.41,0,8.15-4.39,8.15-9.81Z"/><path d="M1698.54,19.89h5.1v3.12c1.59-2.42,3.82-3.63,8.54-3.63,6.81,0,11.59,3.57,11.59,12.48v19.87h-5.1v-19.81c0-6.43-3.5-7.83-7.26-7.83-4.77,0-7.77,3.38-7.77,7.77v19.87h-5.1v-31.84Z"/><path d="M1751.85,7.79h5.1v43.95h-5.1v-2.8c-1.72,2.23-4.46,3.31-8.66,3.31-8.66,0-12.74-6.11-12.74-14.39v-4.21c0-9.11,4.84-14.27,12.74-14.27,4.2,0,6.94,1.34,8.66,3.7V7.79ZM1751.85,38.29v-4.65c0-5.99-2.93-9.68-8.15-9.68s-8.15,3.63-8.15,9.68v4.21c0,5.41,2.74,9.81,8.15,9.81s8.15-4.08,8.15-9.36Z"/><path d="M1790.13,37.85c0,8.28-4.08,14.39-13.25,14.39-8.47,0-13.25-5.6-13.25-14.39v-4.21c0-9.04,4.9-14.27,13.25-14.27s13.25,5.16,13.25,14.27v4.21ZM1785.03,37.85v-4.21c0-6.05-2.93-9.68-8.15-9.68s-8.15,3.69-8.15,9.68v4.21c0,5.48,2.29,9.81,8.15,9.81,5.41,0,8.15-4.39,8.15-9.81Z"/><path d="M1796.81,19.89h5.1v3.12c1.59-2.42,3.82-3.63,8.54-3.63,6.81,0,11.59,3.57,11.59,12.48v19.87h-5.1v-19.81c0-6.43-3.5-7.83-7.26-7.83-4.77,0-7.77,3.38-7.77,7.77v19.87h-5.1v-31.84Z"/><path d="M1660.46,104.54c-1.53-6.88-5.03-9.23-10.44-9.23-6.75,0-10.44,4.2-10.44,15.09v4.84c0,10.89,3.69,15.1,10.44,15.1,5.73,0,8.98-2.8,10.44-9.24h5.29c-1.4,9.87-7.39,14.2-15.73,14.2-9.75,0-15.92-5.86-15.92-20.06v-4.84c0-14.2,6.18-20.06,15.92-20.06,8.66,0,14.39,4.59,15.79,14.2h-5.35Z"/><path d="M1696.76,120.9c0,8.28-4.08,14.39-13.25,14.39-8.47,0-13.25-5.61-13.25-14.39v-4.2c0-9.04,4.9-14.27,13.25-14.27s13.25,5.16,13.25,14.27v4.2ZM1691.67,120.9v-4.2c0-6.05-2.93-9.68-8.15-9.68s-8.15,3.7-8.15,9.68v4.2c0,5.48,2.29,9.81,8.15,9.81,5.41,0,8.15-4.4,8.15-9.81Z"/><path d="M1703.45,102.94h5.1v3.12c1.59-2.42,3.82-3.63,8.54-3.63,6.81,0,11.59,3.56,11.59,12.48v19.87h-5.1v-19.81c0-6.43-3.5-7.83-7.26-7.83-4.77,0-7.77,3.38-7.77,7.77v19.87h-5.1v-31.85Z"/><path d="M1754.85,110.4c-1.72-2.23-3.5-3.25-7.9-3.25-3.76,0-6.18,1.46-6.18,4.27,0,3.63,3.18,4.71,7.39,5.03,5.99.44,11.46,2.16,11.46,9.49,0,5.54-3.76,9.36-11.97,9.36-6.5,0-9.87-1.97-12.3-5.29l3.76-2.67c1.72,2.29,4.01,3.25,8.6,3.25,4.27,0,6.81-1.66,6.81-4.52,0-3.44-2.04-4.65-8.21-5.1-5.35-.38-10.64-2.55-10.64-9.49,0-5.29,3.82-9.04,11.4-9.04,5.16,0,9.1,1.34,11.59,5.28l-3.82,2.68Z"/><path d="M1791.85,134.79h-5.1v-3.12c-1.59,2.42-3.82,3.63-8.54,3.63-6.81,0-11.59-3.57-11.59-12.48v-19.87h5.1v19.81c0,6.43,3.5,7.83,7.26,7.83,4.77,0,7.77-3.37,7.77-7.77v-19.87h5.1v31.85Z"/><path d="M1800.12,90.84h5.1v32.86c0,3.44.19,6.37,5.42,6.37v4.72c-8.03,0-10.51-3.19-10.51-9.81v-34.14Z"/><path d="M1814.77,102.94h4.08v-7h5.1v7h7.32v4.59h-7.32v16.18c0,4.4.51,6.24,4.77,6.24h2.55v4.84h-2.74c-7.52,0-9.68-3.19-9.68-9.81v-17.45h-4.08v-4.59Z"/><path d="M1838.27,90.84h5.73v5.73h-5.73v-5.73ZM1838.59,102.94h5.1v31.85h-5.1v-31.85Z"/><path d="M1852.92,102.94h5.1v3.12c1.59-2.42,3.82-3.63,8.54-3.63,6.82,0,11.59,3.56,11.59,12.48v19.87h-5.1v-19.81c0-6.43-3.5-7.83-7.26-7.83-4.77,0-7.77,3.38-7.77,7.77v19.87h-5.1v-31.85Z"/><path d="M1906.22,102.94h5.1v31.21c0,8.86-5.1,13.12-13.63,13.12-5.54,0-8.92-1.47-11.15-5.35l3.95-2.8c1.34,2.36,3.44,3.56,7.58,3.56,5.54,0,8.15-3.06,8.15-8.54v-2.16c-1.72,2.23-4.45,3.31-8.66,3.31-8.66,0-12.74-6.11-12.74-14.39v-4.2c0-9.11,4.84-14.27,12.74-14.27,4.21,0,6.94,1.34,8.66,3.69v-3.19ZM1906.22,120.9v-4.2c0-5.99-2.93-9.68-8.15-9.68s-8.15,3.63-8.15,9.68v4.2c0,5.41,2.74,9.81,8.15,9.81,5.86,0,8.15-4.33,8.15-9.81Z"/><path d="M1666.19,195.74v2.55c0,14.2-6.43,20.07-16.18,20.07s-15.92-5.86-15.92-20.07v-4.84c0-14.2,6.18-20.06,15.92-20.06,8.54,0,14.39,4.52,15.79,14.2h-5.35c-1.4-6.56-4.84-9.23-10.44-9.23-6.75,0-10.44,4.2-10.44,15.09v4.84c0,10.89,3.69,15.1,10.44,15.1,6.18,0,10.06-3.57,10.64-12.68h-10.44v-4.97h15.98Z"/><path d="M1690.77,192.88c-1.33-1.85-2.99-2.67-5.35-2.67-3.88,0-6.81,2.93-6.81,7.7v19.94h-5.1v-31.85h5.1v3.12c1.33-2.23,3.5-3.63,7.39-3.63,4.33,0,7.07,1.46,9.11,4.33l-4.33,3.06Z"/><path d="M1723.51,203.96c0,8.28-4.08,14.39-13.25,14.39-8.47,0-13.25-5.61-13.25-14.39v-4.21c0-9.05,4.9-14.27,13.25-14.27s13.25,5.16,13.25,14.27v4.21ZM1718.42,203.96v-4.21c0-6.05-2.93-9.68-8.15-9.68s-8.15,3.7-8.15,9.68v4.21c0,5.47,2.29,9.81,8.15,9.81,5.41,0,8.15-4.4,8.15-9.81Z"/><path d="M1755.42,217.85h-5.1v-3.12c-1.59,2.42-3.82,3.63-8.54,3.63-6.82,0-11.59-3.57-11.59-12.48v-19.87h5.1v19.81c0,6.43,3.5,7.83,7.26,7.83,4.77,0,7.77-3.37,7.77-7.77v-19.87h5.1v31.85Z"/><path d="M1777.46,185.49c7.89,0,12.74,5.16,12.74,14.27v4.21c0,8.28-4.08,14.39-12.74,14.39-4.21,0-6.95-1.34-8.66-3.69v15.29h-5.1v-43.95h5.1v3.19c1.72-2.36,4.46-3.69,8.66-3.69ZM1785.1,203.96v-4.21c0-6.05-2.93-9.68-8.15-9.68s-8.15,3.51-8.15,9.24v4.65c0,5.47,2.29,9.81,8.15,9.81,5.42,0,8.15-4.4,8.15-9.81Z"/></g><path d="M828.53,217.98c59.75,0,108.19-48.79,108.19-109S888.28,0,828.53,0"/></g></svg>
+    <span class="acceso__division" aria-hidden="true"></span>
+    <img class="acceso__logo-kram" alt="Comercializadora KRAM" src="data:image/png;base64,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">
+  </div>
+
   <div class="acceso__caja">
-    <p class="acceso__marca">London Consulting Group</p>
     <h2 class="acceso__titulo">KRAM · Seguimiento Comercial</h2>
     <p class="acceso__texto">Escribe la contraseña del equipo para ver y editar el seguimiento compartido.</p>
 
@@ -259,9 +320,10 @@
 <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js?v=4"></script>
-<script src="data.js?v=4"></script>
-<script src="nube.js?v=4"></script>
-<script src="app.js?v=4"></script>
+<script src="config.js?v=6"></script>
+<script src="data.js?v=6"></script>
+<script src="mensajes.js?v=6"></script>
+<script src="nube.js?v=6"></script>
+<script src="app.js?v=6"></script>
 </body>
 </html>

@@ -386,7 +386,13 @@ button { font-family: inherit; }
 }
 .panel__ayuda { font-size: var(--text-xs); color: var(--text-secondary); }
 .panel__cuerpo { overflow-x: auto; }
-.panel__cuerpo--scroll { max-height: 210px; overflow-y: auto; }
+.panel__cuerpo--scroll {
+  flex: 1;
+  min-height: 140px;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+.panel--foco { min-height: 0; }
 
 /* Tablas de resumen */
 .mini { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
@@ -443,6 +449,81 @@ button { font-family: inherit; }
 }
 .foco__zona { margin-left: auto; font-size: var(--text-xs); color: var(--text-secondary); white-space: nowrap; }
 .lista-foco__vacio { padding: var(--space-4) 0; font-size: var(--text-sm); color: var(--text-secondary); }
+
+/* ============ 5b. ENVIAR MENSAJE ============ */
+.mensajes { margin-bottom: var(--space-7); gap: var(--space-5); }
+.mensajes[hidden] { display: none; }
+
+.mensajes__selector {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(200px, 1fr) 2fr;
+  gap: var(--space-4);
+  align-items: end;
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.mensajes__ficha {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  padding-bottom: 9px;
+  overflow-wrap: anywhere;
+}
+
+.mensajes__copias {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+.copia { display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+.copia__cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.copia__titulo { font-size: var(--text-sm); font-weight: var(--weight-bold); letter-spacing: 0; }
+.copia__acciones { display: flex; gap: var(--space-2); }
+.copia__asunto-fila { display: flex; gap: var(--space-2); }
+.copia__asunto-fila .campo__control { min-width: 0; }
+.copia__texto {
+  width: 100%;
+  padding: var(--space-4);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  line-height: var(--leading-normal);
+  color: var(--text-primary);
+  background: var(--neutral-50);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  resize: vertical;
+}
+.copia__texto:focus {
+  outline: none;
+  background: var(--surface-card);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--green-100);
+}
+.copia__texto:disabled { color: var(--text-muted); }
+.copia__pie { font-size: var(--text-xs); color: var(--text-muted); }
+
+/* Botones pequeños y variante clara, usados en esta sección y en el cajón */
+.btn--chico {
+  padding: 6px var(--space-3);
+  font-size: var(--text-xs);
+}
+.btn--claro {
+  background: transparent;
+  color: var(--green-700);
+  border-color: var(--border-default);
+}
+.btn--claro:hover { background: var(--green-100); color: var(--green-800); border-color: var(--green-400); }
+.btn--inactivo {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.btn:disabled { opacity: 0.45; cursor: default; }
+.cajon__btn { justify-content: center; }
 
 /* ============ 6. FILTROS ============ */
 .filtros {
@@ -512,16 +593,31 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
 }
 .tabla {
   width: 100%;
+  table-layout: fixed;          /* cada columna respeta su ancho: nada se sale de pantalla */
   border-collapse: separate;
   border-spacing: 0;
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
 }
+
+/* Reparto del ancho. Suma 100%; si una columna se oculta, el resto crece. */
+.tabla .c-empresa   { width: 13%; }
+.tabla .c-clasif    { width: 4.5%; }
+.tabla .c-estado    { width: 6.5%; }
+.tabla .c-zona      { width: 6.5%; }
+.tabla .c-industria { width: 8.5%; }
+.tabla .c-contacto  { width: 9.5%; }
+.tabla .c-cargo     { width: 8%; }
+.tabla .c-tel       { width: 7.5%; }
+.tabla .c-correo    { width: 9.5%; }
+.tabla .c-estatus   { width: 12%; }
+.tabla .c-fecha     { width: 10%; }
+.tabla .c-detalle   { width: 4.5%; }
 .tabla thead th {
   position: sticky;
   top: 0;
   z-index: 2;
   background: var(--surface-card);
-  padding: var(--space-4) var(--space-3);
+  padding: var(--space-3) var(--space-2);
   text-align: left;
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
@@ -552,7 +648,7 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
 }
 
 .tabla tbody td {
-  padding: var(--space-3);
+  padding: 10px var(--space-2);
   border-bottom: 1px solid var(--neutral-100);
   vertical-align: middle;
   background: var(--surface-card);
@@ -564,7 +660,6 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
   position: sticky;
   left: 0;
   z-index: 1;
-  min-width: 210px;
   border-right: 1px solid var(--border-subtle);
 }
 .tabla thead th:first-child { border-right: 1px solid var(--border-subtle); }
@@ -589,10 +684,11 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
 }
 
 .tabla .vacio-dato { color: var(--text-muted); }
-.tabla .celda-contacto { min-width: 150px; }
-.tabla .celda-cargo { min-width: 170px; color: var(--text-secondary); }
-.tabla .celda-correo { max-width: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tabla .celda-contacto { line-height: var(--leading-snug); }
+.tabla .celda-cargo { color: var(--text-secondary); line-height: var(--leading-snug); }
+.tabla .celda-correo { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tabla .celda-tel { white-space: nowrap; font-family: var(--font-numeric); font-variant-numeric: tabular-nums; }
+.tabla .empresa-btn { overflow-wrap: anywhere; }
 
 /* Clasificación */
 .clasif {
@@ -613,7 +709,8 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
 
 /* Fecha inline */
 .fecha-inline {
-  width: 152px;
+  width: 100%;
+  min-width: 0;
   padding: 6px var(--space-2);
   font-family: var(--font-numeric);
   font-size: var(--text-sm);
@@ -627,7 +724,8 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
 .fecha-inline--alerta { border-color: var(--color-warning); background: var(--color-warning-bg); }
 
 .btn-detalle {
-  padding: 4px var(--space-3);
+  padding: 4px var(--space-2);
+  width: 100%;
   font-size: var(--text-xs);
   font-weight: var(--weight-semibold);
   color: var(--text-secondary);
@@ -647,8 +745,9 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
 .pill-estatus {
   appearance: none;
   -webkit-appearance: none;
-  min-width: 168px;
-  padding: 6px 26px 6px var(--space-3);
+  width: 100%;
+  min-width: 0;
+  padding: 6px 24px 6px var(--space-2);
   font-family: inherit;
   font-size: var(--text-xs);
   font-weight: var(--weight-bold);
@@ -693,10 +792,14 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
   position: fixed;
   inset: 0;
   z-index: 80;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
   padding: var(--space-5);
   background: var(--surface-dark);
+  overflow-y: auto;
 }
 .acceso[hidden] { display: none; }
 .acceso__caja {
@@ -709,10 +812,30 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
 }
-.acceso__marca {
-  font-size: var(--text-xs);
-  font-weight: var(--weight-semibold);
-  color: var(--text-brand, var(--green-600));
+.acceso__logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  width: min(400px, 100%);
+}
+.acceso__logo-lcg {
+  width: 190px;
+  height: auto;
+  color: var(--london-cream);   /* logotipo claro sobre el verde oscuro */
+  flex: none;
+}
+.acceso__division {
+  width: 1px;
+  height: 40px;
+  background: var(--border-on-dark);
+  flex: none;
+}
+.acceso__logo-kram {
+  height: 52px;
+  width: auto;
+  flex: none;
+  border-radius: var(--radius-sm);
 }
 .acceso__titulo { font-size: var(--text-md); }
 .acceso__texto {
@@ -854,7 +977,18 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
 @keyframes entrar-derecha { from { transform: translateX(16px); opacity: 0; } to { transform: none; opacity: 1; } }
 
 /* ============ 10. RESPONSIVE ============ */
+/* Debajo de 1500 px se esconde Estado; debajo de 1300, también Cargo.
+   Los dos datos siguen visibles en el detalle de la cuenta y en la exportación. */
+@media (max-width: 1500px) {
+  .tabla .c-estado, .tabla td[data-label="Estado"] { display: none; }
+}
+@media (max-width: 1300px) {
+  .tabla .c-cargo, .tabla td[data-label="Cargo"] { display: none; }
+}
+
 @media (max-width: 1280px) {
+  .mensajes__selector { grid-template-columns: 1fr 1fr; }
+  .mensajes__ficha { grid-column: 1 / -1; padding-bottom: 0; }
   .kpis { grid-template-columns: repeat(3, 1fr); }
   .resumenes { grid-template-columns: 1fr 1fr; }
   .panel--foco { grid-column: 1 / -1; }
@@ -864,6 +998,8 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
 
 @media (max-width: 900px) {
   :root { --container-pad: var(--space-4); }
+  .mensajes__copias { grid-template-columns: 1fr; }
+  .mensajes__selector { grid-template-columns: 1fr; }
   .kpis { grid-template-columns: repeat(2, 1fr); }
   .portada__logo { width: 180px; }
   .portada__titulo { font-size: var(--text-lg); }
@@ -883,7 +1019,9 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
 
   .tabla-marco { max-height: none; background: none; box-shadow: none; overflow: visible; }
   .tabla thead { display: none; }
+  .tabla { table-layout: auto; font-size: var(--text-sm); }
   .tabla, .tabla tbody, .tabla tr, .tabla td { display: block; width: 100%; }
+  .tabla td[data-label="Estado"], .tabla td[data-label="Cargo"] { display: flex; }
   .tabla tr {
     background: var(--surface-card);
     border-radius: var(--radius-md);
@@ -922,10 +1060,10 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
   .tabla .celda-empresa { justify-content: flex-start; }
   .tabla .empresa-btn { font-size: var(--text-base); }
   .tabla .celda-correo { max-width: 62%; }
-  .tabla td[data-label="Estatus de cita"],
-  .tabla td[data-label="Fecha de consecución"] { padding-top: var(--space-2); }
-  .pill-estatus, .fecha-inline { width: 100%; min-width: 0; }
+  .tabla td[data-label="Estatus"],
+  .tabla td[data-label="Fecha de cita"] { padding-top: var(--space-2); }
   .tabla .celda-accion::before { display: none; }
+  .btn-detalle { width: auto; padding-inline: var(--space-4); }
   .tabla .celda-accion { justify-content: flex-end; padding-top: var(--space-3); }
 }
 
