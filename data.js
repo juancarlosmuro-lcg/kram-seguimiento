@@ -1,7 +1,8 @@
 /* =====================================================================
    LCG · Seguimiento Comercial — Base de cuentas
    ---------------------------------------------------------------------
-   Generado a partir de "Seguimiento_Comercial_KRAM.xlsx" (42 cuentas).
+   Generado a partir de "Seguimiento_Comercial_KRAM.xlsx" (42 cuentas)
+   más las altas posteriores hechas a mano.
    Los valores son idénticos a los del Excel original: los campos que en
    el archivo venían como "-" se conservan así y la interfaz los muestra
    como "—". No agregues datos inventados.
@@ -53,5 +54,6 @@ const CUENTAS_INICIALES = [
   {"id": "sunopta", "empresa": "SUNOPTA", "clasificacion": "AAA", "estado": "Michoacán", "zona": "Occidente", "industria": "Agronegocio", "contacto": "Brian Kocher", "cargo": "CEO", "telefono": "-", "correo": "brian.kocher@sunopta.com"},
   {"id": "trenzados-marinos-grupo-ortiz", "empresa": "Trenzados Marinos (Grupo Ortiz)", "clasificacion": "AAA", "estado": "Michoacán", "zona": "Occidente", "industria": "Manufactura", "contacto": "Javier de la Mata Medina", "cargo": "CEO", "telefono": "-", "correo": "fjavier.delamata@grupoortiz.com"},
   {"id": "vivri", "empresa": "VIVRI", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Bienes de Consumo", "contacto": "Luis de la Torre Rábago", "cargo": "Presidente", "telefono": "-", "correo": "luis@vivri.com"},
-  {"id": "wendy-colchones", "empresa": "Wendy Colchones", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Bienes de Consumo", "contacto": "Manuel López Castillejos", "cargo": "CEO", "telefono": "-", "correo": "mlc@wendy.com.mx"}
+  {"id": "wendy-colchones", "empresa": "Wendy Colchones", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Bienes de Consumo", "contacto": "Manuel López Castillejos", "cargo": "CEO", "telefono": "-", "correo": "mlc@wendy.com.mx"},
+  {"id": "alipec", "empresa": "Alipec", "clasificacion": "AA", "estado": "Jalisco", "zona": "Occidente", "industria": "Agronegocio", "contacto": "Juan Lorenzo Delgado", "cargo": "Subdirector de Operaciones", "telefono": "-", "correo": "jdelgado@alipec.com"}
 ];
