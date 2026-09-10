@@ -62,6 +62,7 @@
     orden: { campo: null, dir: 'asc' },   // null = orden original del Excel
     idAbierto: null,
     focoExpandido: false,
+    trato: 'o',            // concordancia de género del saludo del correo
     ultimoGuardado: null,
     almacenDisponible: true,
     modo: 'local',        // 'local' = localStorage · 'nube' = base compartida
@@ -646,6 +647,22 @@
 
   const SIN_NOMBRE = '[nombre del contacto]';
 
+  /* Nombres de mujer que no terminan en "a", más las excepciones de hombres
+     que sí terminan en "a". Sirven para adivinar el trato; el selector de
+     la pantalla siempre manda sobre esta lista. */
+  const NOMBRES_MUJER = ['beatriz', 'carmen', 'consuelo', 'dolores', 'guadalupe', 'ines',
+    'isabel', 'itzel', 'mercedes', 'noemi', 'raquel', 'rocio', 'soledad', 'yatzil'];
+  const HOMBRES_EN_A = ['elias', 'tobias', 'matias', 'zacarias', 'luca', 'joshua', 'josua',
+    'nicola', 'akira', 'kenia'];
+
+  /** Adivina si el trato va en femenino. El usuario puede corregirlo con un clic. */
+  function tratoSugerido(contacto) {
+    const nombre = normalizar(primerNombre(contacto));
+    if (NOMBRES_MUJER.indexOf(nombre) !== -1) return 'a';
+    if (HOMBRES_EN_A.indexOf(nombre) !== -1) return 'o';
+    return /a$/.test(nombre) ? 'a' : 'o';
+  }
+
   /** Primera palabra del nombre, para un saludo natural en WhatsApp. */
   function primerNombre(contacto) {
     if (esVacio(contacto)) return SIN_NOMBRE;
@@ -673,7 +690,8 @@
       .split('[Primer nombre]').join(primerNombre(c.contacto))
       .split('[Nombre contacto]').join(esVacio(c.contacto) ? SIN_NOMBRE : c.contacto)
       .split('[Nombre empresa]').join(c.empresa)
-      .split('[Cargo]').join(esVacio(c.cargo) ? '[cargo]' : c.cargo);
+      .split('[Cargo]').join(esVacio(c.cargo) ? '[cargo]' : c.cargo)
+      .split('[o/a]').join(estado.trato);
   }
 
   function llenarSelectorEmpresas() {
@@ -688,12 +706,22 @@
     el.msjWhats.disabled = !hayCuenta;
     el.msjCorreo.disabled = !hayCuenta;
     el.msjAsunto.disabled = !hayCuenta;
+    el.msjTrato.disabled = !hayCuenta;
     document.querySelectorAll('[data-copiar]').forEach(b => { b.disabled = !hayCuenta; });
   }
 
-  /** Genera los dos mensajes para la cuenta elegida. */
-  function generarMensajes(id) {
+  /**
+   * Genera los dos mensajes para la cuenta elegida.
+   * Con "conservarTrato" se respeta lo que el usuario acaba de elegir en el
+   * selector; sin él, se sugiere a partir del nombre del contacto.
+   */
+  function generarMensajes(id, conservarTrato) {
     const c = obtener(id);
+
+    if (c && !conservarTrato) {
+      estado.trato = tratoSugerido(c.contacto);
+      el.msjTrato.value = estado.trato;
+    }
 
     if (!c) {
       el.msjContacto.innerHTML = '<option value="">—</option>';
@@ -1057,7 +1085,7 @@
       'archivoImportar', 'fBuscar', 'fClasificacion', 'fZona', 'fIndustria', 'fEstatus',
       'acceso', 'accesoNombre', 'accesoClave', 'accesoError', 'btnEntrar', 'btnSalir',
       'bloqueMensajes', 'btnToggleMensajes', 'msjEmpresa', 'msjContacto', 'msjFicha',
-      'msjWhats', 'msjAsunto', 'msjCorreo', 'btnPrepararMensaje',
+      'msjWhats', 'msjAsunto', 'msjCorreo', 'msjTrato', 'btnPrepararMensaje',
       'cuerpoFoco', 'btnVerTodasFoco'];
     ids.forEach(id => { el[id] = document.getElementById(id); });
     el.lectura = el.lecturaEjecutiva;
@@ -1168,6 +1196,10 @@
 
     // --- Enviar mensaje ---
     el.msjEmpresa.addEventListener('change', () => generarMensajes(el.msjEmpresa.value));
+    el.msjTrato.addEventListener('change', () => {
+      estado.trato = el.msjTrato.value;
+      generarMensajes(el.msjEmpresa.value, true);
+    });
     document.querySelectorAll('[data-copiar]').forEach(boton => {
       boton.addEventListener('click', () => copiarTexto(el[boton.dataset.copiar], boton.dataset.formato));
     });

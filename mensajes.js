@@ -3,8 +3,9 @@
    ---------------------------------------------------------------------
    Estos son los textos que Ari Sevilla (Comercializadora KRAM) envía a
    los prospectos para recomendar a London Consulting Group y abrir la
-   cita. Edítalos libremente: la herramienta solo sustituye las etiquetas
-   y respeta todo lo demás, incluidos los saltos de línea.
+   conversación con Leonardo Pimentel. Edítalos libremente: la herramienta
+   solo sustituye las etiquetas y respeta todo lo demás, incluidos los
+   saltos de línea.
 
    Negritas: encierra el texto entre dobles asteriscos, **así**.
      · En WhatsApp se convierten al formato propio de la app (*así*), que es
@@ -14,10 +15,13 @@
    Úsalas con medida: si se resalta todo, no resalta nada.
 
    Etiquetas disponibles:
-     [Primer nombre]     → primera palabra del contacto (ej. "Carlos")
+     [Primer nombre]     → primera palabra del contacto (ej. "Diana")
      [Nombre contacto]   → nombre completo tal como está en data.js
      [Nombre empresa]    → nombre de la empresa
      [Cargo]             → cargo del contacto
+     [o/a]               → concordancia de género. "Estimad[o/a]" produce
+                           "Estimado" o "Estimada" según el selector de
+                           trato que aparece junto al contacto.
 
    Si una cuenta no tiene contacto registrado, las etiquetas de nombre se
    sustituyen por un marcador visible para que no se envíe incompleto.
@@ -25,69 +29,51 @@
 
 const PLANTILLAS = {
 
-  /* ---------------- WhatsApp: personal, directo, breve ---------------- */
+  /* ---------------- WhatsApp: personal y directo ---------------- */
   whatsapp:
-`Hola [Primer nombre], ¿cómo estás? Te saluda Ari Sevilla, Director Comercial de Comercializadora KRAM.
+`Hola [Primer nombre], ¿cómo estás? Te saluda Ari Sevilla, Director Comercial y miembro del Consejo de Comercializadora KRAM.
 
-Te escribo por algo que a nosotros nos funcionó muy bien. Trabajamos con London Consulting Group en un proyecto de rentabilidad e inteligencia artificial aplicada a la operación, y los resultados hablan solos: crecimos **70% en ventas globales** y subimos **9.1 puntos de margen neto**, con un **ROI de 7 a 1**.
+Te escribo porque quiero recomendarte retomar una conversación con **Leonardo Pimentel**, Director de Operaciones de London Consulting Group. Nosotros trabajamos con LCG un primer proyecto de transformación enfocado en rentabilidad e inteligencia artificial aplicada a la operación, y los resultados hablan por sí solos: crecimos **70% en ventas globales**, incrementamos **9.1 puntos nuestro margen neto** y alcanzamos un **ROI de 7 a 1**. Y actualmente estamos en el despliegue de un segundo proyecto enfocado en Sell Out y nuestro segundo CEDIS más importante en el país.
 
-No son una firma que entrega recomendaciones y se va: **implementan con tu gente, dentro de tu operación**.
+Algo que para nosotros hizo una diferencia importante es que **LCG no se queda en recomendaciones**: implementan directamente con los equipos y dentro de la operación, hasta convertir las oportunidades identificadas en resultados.
 
-Me gustaría conectarte con su equipo directivo para que te muestren el caso y cómo lo aplicarían en [Nombre empresa]. Es una sesión de **una hora, sin costo ni compromiso**. Yo únicamente los presento.
+Además, Leonardo puede mostrarte sobre el despliegue que están haciendo de **modelos agénticos de IA** ya aplicados e implementados en procesos reales de negocio, y cómo los están utilizando para potenciar productividad, rentabilidad y toma de decisiones.
 
-Si te parece, les paso tu contacto y ellos te buscan. Estos son los horarios que su equipo tiene disponibles:
+Creo que para [Nombre empresa] puede ser especialmente interesante. Estoy seguro de que desde el **prediagnóstico** pueden comenzar a generarles valor, porque ahí podrás ver de manera tangible dónde están los principales gaps de la operación, cuánto potencial existe por liberar y qué beneficio económico podría representar para la empresa.
 
-Lun 14 sep · 1:00 o 2:00 pm
-Mar 15 sep · 1:00, 3:00 o 4:00 pm
-Jue 17 sep · 10:00 am
-Vie 18 sep · 12:00 pm
+¿Te parece bien si tenemos una llamada breve los dos con Leonardo y conversamos?
 
-Si esa semana la traes cargada, la del 21 al 25 también tienen espacio. Quedo pendiente de tu confirmación.`,
+Saludos,
+Ari Sevilla
+Director Comercial y miembro del Consejo
+Comercializadora KRAM`,
 
   /* ---------------- Correo: ejecutivo, con el caso completo ---------------- */
   correoAsunto:
-`Recomendación para [Nombre empresa] · rentabilidad e IA aplicada a la operación`,
+`[Primer nombre], una recomendación para [Nombre empresa] | Rentabilidad + IA aplicada`,
 
   correoCuerpo:
-`Estimado [Primer nombre],
+`Estimad[o/a] [Primer nombre]:
 
-Espero que te encuentres muy bien. Te saluda Ari Sevilla, Director Comercial de Comercializadora KRAM.
+Espero que te encuentres muy bien. Soy Ari Sevilla, Director Comercial y miembro del Consejo de Comercializadora KRAM.
 
-Te escribo para recomendarte de manera directa a London Consulting Group, la firma con la que trabajamos en KRAM y que quiero que conozcas.
+Quise escribirte personalmente para recomendarte conocer a **Leonardo Pimentel**, Director de Operaciones de London Consulting Group, firma con la que hemos venido trabajando en KRAM y con la que hemos obtenido resultados muy relevantes.
 
-Como contexto, en KRAM llevamos más de 35 años en la importación y distribución de confitería y chocolates, con marcas como Feastables, Ritter Sport, PEZ y Jelly Belly, y atendiendo a clientes como Costco, Walmart, 7-Eleven y Liverpool. En un negocio así, el reto no es tener información: es actuar sobre ella a la velocidad a la que se mueve el mercado.
+Con LCG desarrollamos un primer proyecto de transformación enfocado en rentabilidad e inteligencia artificial aplicada a la operación, y los resultados hablan por sí solos: crecimos **70% en ventas globales**, incrementamos **9.1 puntos nuestro margen neto** y alcanzamos un **ROI de 7 a 1**. A partir de esos resultados, actualmente estamos desplegando con ellos un segundo proyecto enfocado en Sell Out y en nuestro segundo CEDIS más importante del país.
 
-Con London Consulting Group implementamos un modelo de rentabilidad y agentes de inteligencia artificial conectados a nuestra operación, para decidir presupuesto, portafolio y puntos de venta con datos y no por intuición. Los resultados del proyecto fueron los siguientes:
+Algo que para nosotros hizo una diferencia importante es que **LCG no se queda en recomendaciones**: implementan directamente con los equipos y dentro de la operación, hasta convertir las oportunidades identificadas en resultados.
 
-• Crecimiento de **70% en ventas globales**
-• Incremento de **9.1 puntos porcentuales en margen neto**
-• **ROI de 7.1 a 1**
+Adicionalmente, Leonardo puede mostrarte el despliegue que están realizando de **modelos agénticos de IA** ya aplicados e implementados en procesos reales de negocio, y cómo los están utilizando para potenciar productividad, rentabilidad y toma de decisiones.
 
-Lo que más valoro de ellos es que son una **firma de implementación, no de recomendación**: trabajan dentro de la operación, junto con el equipo, y **firman por contrato un ROI mínimo de 1 a 1**. Están certificados por Anthropic para el diseño e implementación de ecosistemas de inteligencia artificial agéntica.
+Por el tipo de operación de [Nombre empresa], creo que puede ser especialmente interesante que conozcas lo que están haciendo. Estoy seguro de que desde el **prediagnóstico** pueden comenzar a generarles valor, porque es ahí donde podrán visualizar de manera tangible los principales gaps de la operación, dimensionar cuánto potencial existe por liberar y qué beneficio económico podría representar para la empresa.
 
-Considero que en [Nombre empresa] hay una oportunidad clara de aplicar algo similar. Me gustaría presentarte a su equipo directivo en una sesión de **una hora, sin costo ni compromiso**, en la que te compartan el caso a detalle y cómo lo abordarían en tu operación. La reunión sería directamente con ellos; yo únicamente hago la presentación.
+Por eso quería hacerte personalmente esta recomendación.
 
-Te comparto las opciones de agenda de su equipo:
+¿Te parece bien si tenemos una llamada breve los dos con Leonardo y conversamos?
 
-**Semana del 14 al 18 de septiembre**
-• Lunes 14: 1:00 pm, 2:00 pm
-• Martes 15: 1:00 pm, 3:00 pm, 4:00 pm
-• Jueves 17: 10:00 am
-• Viernes 18: 12:00 pm
-
-**Semana del 21 al 25 de septiembre**
-• Lunes 21: 1:00 pm, 3:00 pm
-• Martes 22: 1:00 pm, 3:00 pm, 4:00 pm
-• Miércoles 23: 3:00 pm, 4:00 pm
-• Jueves 24: 3:00 pm, 4:00 pm
-• Viernes 25: 12:00 pm
-
-Confírmame el horario que te acomode y con gusto los conecto.
-
-Saludos cordiales,
-
+Saludos,
 Ari Sevilla
-Director Comercial
+Director Comercial y miembro del Consejo
 Comercializadora KRAM`
 
 };

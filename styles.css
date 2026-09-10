@@ -458,7 +458,7 @@ button { font-family: inherit; }
 
 .mensajes__selector {
   display: grid;
-  grid-template-columns: minmax(220px, 1fr) minmax(200px, 1fr) 2fr;
+  grid-template-columns: minmax(190px, 1fr) minmax(180px, 1fr) 132px minmax(0, 1.4fr);
   gap: var(--space-4);
   align-items: end;
   padding-bottom: var(--space-4);
@@ -989,7 +989,7 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
 }
 
 @media (max-width: 1280px) {
-  .mensajes__selector { grid-template-columns: 1fr 1fr; }
+  .mensajes__selector { grid-template-columns: 1fr 1fr 132px; }
   .mensajes__ficha { grid-column: 1 / -1; padding-bottom: 0; }
   .kpis { grid-template-columns: repeat(3, 1fr); }
   .resumenes { grid-template-columns: 1fr 1fr; }
