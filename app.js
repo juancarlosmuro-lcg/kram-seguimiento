@@ -81,6 +81,9 @@
   const esVacio = v => v === undefined || v === null || v === '' || v === '-' || v === '—';
   const mostrar = v => (esVacio(v) ? '—' : v);
 
+  /** Deja solo los dígitos de un teléfono; devuelve '' si no hay dato. */
+  const soloDigitos = t => (esVacio(t) ? '' : String(t).replace(/\D/g, ''));
+
   const normalizar = t => String(t || '')
     .toLowerCase()
     .normalize('NFD')
@@ -467,8 +470,7 @@
       if (heno.indexOf(q) !== -1) return true;
       // Búsqueda por teléfono ignorando espacios, guiones y la lada del país,
       // para que "5526963256", "55 2696" o "+52 55 2696 3256" encuentren lo mismo.
-      const soloDigitos = t => String(t || '').replace(/\D/g, '');
-      const buscado = soloDigitos(f.buscar);
+      const buscado = String(f.buscar).replace(/\D/g, '');
       if (buscado.length < 3) return false;
       const consulta = (buscado.length > 10 && buscado.indexOf('52') === 0) ? buscado.slice(2) : buscado;
       const tel = soloDigitos(c.telefono);
@@ -485,18 +487,28 @@
     return normalizar(c[campo]);
   }
 
+  /* Campos que pueden venir sin dato: las cuentas vacías se agrupan al final
+     en cualquier dirección, para que no estorben al revisar la lista.
+     El teléfono se compara solo por dígitos, así el orden queda por lada. */
+  const CAMPOS_OPCIONALES = {
+    fechaCita: c => c.fechaCita || '',
+    telefono: c => soloDigitos(c.telefono)
+  };
+
   function ordenar(lista) {
     const campo = estado.orden.campo;
     if (!campo) return lista;                    // orden original del Excel
     const signo = estado.orden.dir === 'asc' ? 1 : -1;
+    const opcional = CAMPOS_OPCIONALES[campo];
 
     return lista.slice().sort((a, b) => {
-      if (campo === 'fechaCita') {
-        // Las cuentas sin fecha siempre van al final, en cualquier dirección.
-        if (!a.fechaCita && !b.fechaCita) return a.empresa.localeCompare(b.empresa, 'es');
-        if (!a.fechaCita) return 1;
-        if (!b.fechaCita) return -1;
-        return (a.fechaCita < b.fechaCita ? -1 : a.fechaCita > b.fechaCita ? 1 : 0) * signo;
+      if (opcional) {
+        const va = opcional(a);
+        const vb = opcional(b);
+        if (!va && !vb) return a.empresa.localeCompare(b.empresa, 'es');
+        if (!va) return 1;
+        if (!vb) return -1;
+        return (va < vb ? -1 : va > vb ? 1 : 0) * signo;
       }
       const va = valorOrden(a, campo);
       const vb = valorOrden(b, campo);
