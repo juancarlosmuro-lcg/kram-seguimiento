@@ -462,9 +462,17 @@
     if (f.industria && c.industria !== f.industria) return false;
     if (f.estatus && c.estatus !== f.estatus) return false;
     if (f.buscar) {
-      const q = normalizar(f.buscar);
-      const heno = normalizar(c.empresa + ' ' + c.contacto + ' ' + c.correo);
-      if (heno.indexOf(q) === -1) return false;
+      const q = normalizar(f.buscar).trim();
+      const heno = normalizar(c.empresa + ' ' + c.contacto + ' ' + c.correo + ' ' + c.telefono);
+      if (heno.indexOf(q) !== -1) return true;
+      // Búsqueda por teléfono ignorando espacios, guiones y la lada del país,
+      // para que "5526963256", "55 2696" o "+52 55 2696 3256" encuentren lo mismo.
+      const soloDigitos = t => String(t || '').replace(/\D/g, '');
+      const buscado = soloDigitos(f.buscar);
+      if (buscado.length < 3) return false;
+      const consulta = (buscado.length > 10 && buscado.indexOf('52') === 0) ? buscado.slice(2) : buscado;
+      const tel = soloDigitos(c.telefono);
+      return !!tel && tel.indexOf(consulta) !== -1;
     }
     return true;
   }
