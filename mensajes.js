@@ -41,6 +41,8 @@ Además, Leonardo puede mostrarte sobre el despliegue que están haciendo de **m
 
 Creo que para [Nombre empresa] puede ser especialmente interesante. Estoy seguro de que desde el **prediagnóstico** pueden comenzar a generarles valor, porque ahí podrás ver de manera tangible dónde están los principales gaps de la operación, cuánto potencial existe por liberar y qué beneficio económico podría representar para la empresa.
 
+Y al margen de cómo resulte, en lo personal me dará mucho gusto conocerte. Siempre es valioso construir relación con empresarios que están enfrentando retos parecidos a los nuestros.
+
 ¿Te parece bien si tenemos una llamada breve los dos con Leonardo y conversamos?
 
 Saludos,
@@ -68,6 +70,8 @@ Adicionalmente, Leonardo puede mostrarte el despliegue que están realizando de 
 Por el tipo de operación de [Nombre empresa], creo que puede ser especialmente interesante que conozcas lo que están haciendo. Estoy seguro de que desde el **prediagnóstico** pueden comenzar a generarles valor, porque es ahí donde podrán visualizar de manera tangible los principales gaps de la operación, dimensionar cuánto potencial existe por liberar y qué beneficio económico podría representar para la empresa.
 
 Por eso quería hacerte personalmente esta recomendación.
+
+Y al margen del resultado de la conversación con Leonardo, en lo personal me dará mucho gusto conocerte y estrechar la relación entre [Nombre empresa] y KRAM. Siempre es valioso construir relación con empresas y empresarios que enfrentan retos parecidos a los nuestros.
 
 ¿Te parece bien si tenemos una llamada breve los dos con Leonardo y conversamos?
 
