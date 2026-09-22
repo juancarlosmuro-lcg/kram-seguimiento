@@ -7,6 +7,11 @@
    el archivo venían como "-" se conservan así y la interfaz los muestra
    como "—". No agregues datos inventados.
 
+   Las cuentas cuya clasificación, estado, zona o industria todavía no se
+   define llevan "-" en esos campos: la herramienta las muestra como "—",
+   las agrupa aparte en los resúmenes y las manda al final al ordenar.
+   En cuanto tengas el dato, cámbialo aquí y todo se recalcula solo.
+
    Para dar de alta una cuenta nueva, copia una línea y edítala.
    El campo "id" debe ser único (minúsculas, sin acentos, con guiones);
    es la llave con la que se guarda el seguimiento en el navegador.
@@ -34,7 +39,7 @@ const CUENTAS_INICIALES = [
   {"id": "natura-biofoods", "empresa": "Natura BioFoods", "clasificacion": "A", "estado": "Jalisco", "zona": "Occidente", "industria": "Bienes de Consumo", "contacto": "Enrique Gómez", "cargo": "Director de Planeación Estratégica", "telefono": "33 1066 0441", "correo": "enrique.gomez@nbf.mx"},
   {"id": "limones-monica", "empresa": "Limones Mónica", "clasificacion": "A", "estado": "Jalisco", "zona": "Occidente", "industria": "Agronegocio", "contacto": "Sergio Cortés Domínguez", "cargo": "Dueño", "telefono": "23 2124 8756", "correo": "sergioc@limonik.mx"},
   {"id": "toyo-foods", "empresa": "Toyo Foods", "clasificacion": "AA", "estado": "Jalisco", "zona": "Occidente", "industria": "Retail", "contacto": "Kido Ishikawa Katagiri", "cargo": "Director General", "telefono": "-", "correo": "kishikawa@toyofoods.com.mx"},
-  {"id": "price-shoes", "empresa": "Price Shoes", "clasificacion": "AAA", "estado": "Ciudad de México", "zona": "Metro", "industria": "Bienes de Consumo", "contacto": "Luis Vergara", "cargo": "Director General Adjunto", "telefono": "55 7928 4961", "correo": "lvergara@priceshoes.com"},
+  {"id": "price-shoes", "empresa": "Price Shoes", "clasificacion": "AAA", "estado": "Ciudad de México", "zona": "Metro", "industria": "Bienes de Consumo", "contacto": "Carlos Schatz", "cargo": "CEO", "telefono": "-", "correo": "cschatz@priceshoes.com"},
   {"id": "productos-de-consumo-z", "empresa": "Productos de Consumo Z", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Retail", "contacto": "Celia Martínez Fernández", "cargo": "Directora Retail", "telefono": "-", "correo": "cmartinez@pcz.com.mx"},
   {"id": "grupo-merza", "empresa": "Grupo MERZA", "clasificacion": "AAA", "estado": "Michoacán", "zona": "Occidente", "industria": "Retail", "contacto": "Guillermo Valdés Vega", "cargo": "Presidente", "telefono": "-", "correo": "gvega@merza.com"},
   {"id": "super-kiosko", "empresa": "Super Kiosko", "clasificacion": "AAA", "estado": "Colima", "zona": "Occidente", "industria": "Retail", "contacto": "Fernando Velasco Márquez", "cargo": "CEO", "telefono": "-", "correo": "fvelasco@mikiosko.mx"},
@@ -57,5 +62,10 @@ const CUENTAS_INICIALES = [
   {"id": "wendy-colchones", "empresa": "Wendy Colchones", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Bienes de Consumo", "contacto": "Manuel López Castillejos", "cargo": "CEO", "telefono": "-", "correo": "mlc@wendy.com.mx"},
   {"id": "alipec", "empresa": "Alipec", "clasificacion": "AA", "estado": "Jalisco", "zona": "Occidente", "industria": "Agronegocio", "contacto": "Juan Lorenzo Delgado", "cargo": "Subdirector de Operaciones", "telefono": "-", "correo": "jdelgado@alipec.com"},
   {"id": "motsa-montacargas", "empresa": "Motsa Montacargas", "clasificacion": "A", "estado": "Michoacán", "zona": "Occidente", "industria": "Maquinaria", "contacto": "Fernando Torres", "cargo": "Director General", "telefono": "55 2696 3256", "correo": "fernando.t@motsa.com.mx"},
-  {"id": "plastic-trends", "empresa": "Plastic Trends", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Manufactura", "contacto": "Lorenza Torres Parmet", "cargo": "CEO", "telefono": "33 1895 2069", "correo": "lorenza.parmet@plastictrends.com.mx"}
+  {"id": "plastic-trends", "empresa": "Plastic Trends", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Manufactura", "contacto": "Lorenza Torres Parmet", "cargo": "CEO", "telefono": "33 1895 2069", "correo": "lorenza.parmet@plastictrends.com.mx"},
+  {"id": "bansi", "empresa": "Bansí", "clasificacion": "-", "estado": "-", "zona": "-", "industria": "-", "contacto": "Jorge de Jesús Montes", "cargo": "CEO", "telefono": "-", "correo": "-"},
+  {"id": "pastelerias-marisa", "empresa": "Pastelerías Marisa", "clasificacion": "-", "estado": "-", "zona": "-", "industria": "-", "contacto": "Marisa Lazo", "cargo": "Director General", "telefono": "-", "correo": "-"},
+  {"id": "el-cuatro", "empresa": "El Cuatro", "clasificacion": "-", "estado": "-", "zona": "-", "industria": "-", "contacto": "Rafael Ramírez", "cargo": "Director de Genética y Ganado", "telefono": "-", "correo": "-"},
+  {"id": "latin-berry-plants", "empresa": "Latin Berry Plants", "clasificacion": "-", "estado": "-", "zona": "-", "industria": "-", "contacto": "Pablo Kersey", "cargo": "Director de Operaciones", "telefono": "-", "correo": "-"},
+  {"id": "global-frut", "empresa": "Global Frut", "clasificacion": "-", "estado": "-", "zona": "-", "industria": "-", "contacto": "Mario Rivas Barragán", "cargo": "CEO", "telefono": "-", "correo": "-"}
 ];

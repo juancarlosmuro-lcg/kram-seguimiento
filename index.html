@@ -9,9 +9,20 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- Al actualizar styles.css o app.js, sube el número de versión (?v=) para que
-     el navegador baje el archivo nuevo y no la copia guardada en caché. -->
-<link rel="stylesheet" href="styles.css?v=16">
+<!-- Los archivos propios se cargan con una marca de tiempo, así que el navegador
+     siempre baja la versión recién publicada. Ya no hay que subir números de versión
+     a mano al editar data.js, styles.css o cualquier otro archivo del proyecto. -->
+<script>
+(function () {
+  var marca = Date.now();
+  var archivos = ['styles.css', 'config.js', 'data.js', 'mensajes.js', 'nube.js', 'app.js'];
+  archivos.forEach(function (archivo) {
+    document.write(/\.css$/.test(archivo)
+      ? '<link rel="stylesheet" href="' + archivo + '?t=' + marca + '">'
+      : '<scr' + 'ipt src="' + archivo + '?t=' + marca + '"></scr' + 'ipt>');
+  });
+})();
+</script>
 </head>
 <body>
 
@@ -328,10 +339,5 @@
 <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js?v=13"></script>
-<script src="data.js?v=13"></script>
-<script src="mensajes.js?v=13"></script>
-<script src="nube.js?v=13"></script>
-<script src="app.js?v=13"></script>
 </body>
 </html>

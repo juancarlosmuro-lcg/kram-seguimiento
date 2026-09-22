@@ -708,6 +708,7 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
 .clasif--AAA { background: var(--green-800); color: var(--london-mint); }
 .clasif--AA  { background: var(--green-200); color: var(--green-800); }
 .clasif--A   { background: var(--surface-sunken); color: var(--text-secondary); }
+.clasif--sin { background: transparent; border: 1px dashed var(--border-default); color: var(--text-muted); }
 
 /* Fecha inline */
 .fecha-inline {

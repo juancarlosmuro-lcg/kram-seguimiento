@@ -212,19 +212,20 @@
     };
   }
 
+  const SIN_DATO = 'Sin definir';
+
   function agrupar(campo, ordenPersonalizado) {
     const mapa = new Map();
     estado.cuentas.forEach(c => {
-      const clave = c[campo] || '—';
+      const clave = esVacio(c[campo]) ? SIN_DATO : c[campo];
       if (!mapa.has(clave)) mapa.set(clave, []);
       mapa.get(clave).push(c);
     });
-    let claves = Array.from(mapa.keys());
-    if (ordenPersonalizado) {
-      claves.sort((a, b) => ordenPersonalizado.indexOf(a) - ordenPersonalizado.indexOf(b));
-    } else {
-      claves.sort((a, b) => mapa.get(b).length - mapa.get(a).length);
-    }
+    // "Sin definir" siempre va al final, sea cual sea el criterio de orden.
+    const posicion = k => (k === SIN_DATO ? Infinity
+      : ordenPersonalizado ? (ordenPersonalizado.indexOf(k) + 1 || Infinity) : 0);
+    const claves = Array.from(mapa.keys()).sort((a, b) =>
+      (posicion(a) - posicion(b)) || (mapa.get(b).length - mapa.get(a).length));
     return claves.map(k => Object.assign({ clave: k }, metricas(mapa.get(k))));
   }
 
@@ -342,7 +343,7 @@
 
     el.listaFoco.innerHTML = visibles.map(c =>
       '<li><button class="foco" type="button" data-id="' + escapar(c.id) + '">' +
-        '<span class="clasif clasif--' + c.clasificacion + '">' + c.clasificacion + '</span>' +
+        insignia(c) +
         '<span class="foco__empresa">' + escapar(c.empresa) + '</span>' +
         '<span class="foco__zona">' + escapar(c.estatus) + '</span>' +
       '</button></li>'
@@ -354,6 +355,12 @@
       '<option value="' + e.valor + '"' + (e.valor === seleccionado ? ' selected' : '') + '>' +
       e.valor + '</option>'
     ).join('');
+  }
+
+  /** Pastilla de clasificación. Las cuentas aún sin clasificar salen neutras. */
+  function insignia(c) {
+    const clase = PRIORIDAD[c.clasificacion] ? c.clasificacion : 'sin';
+    return '<span class="clasif clasif--' + clase + '">' + escapar(mostrar(c.clasificacion)) + '</span>';
   }
 
   function celdaTelefono(c) {
@@ -384,7 +391,7 @@
           (c.notas ? '<span class="marca-nota" title="Tiene notas"></span>' : '') +
         '</span>' +
       '</td>' +
-      '<td class="c-clasif" data-label="Clasificación"><span class="clasif clasif--' + c.clasificacion + '">' + escapar(c.clasificacion) + '</span></td>' +
+      '<td class="c-clasif" data-label="Clasificación">' + insignia(c) + '</td>' +
       '<td class="c-estado" data-label="Estado">' + textoSimple(c.estado) + '</td>' +
       '<td class="c-zona" data-label="Zona">' + textoSimple(c.zona) + '</td>' +
       '<td class="c-industria" data-label="Industria">' + textoSimple(c.industria) + '</td>' +
@@ -482,9 +489,8 @@
   const filtrar = () => estado.cuentas.filter(coincide);
 
   function valorOrden(c, campo) {
-    if (campo === 'clasificacion') return PRIORIDAD[c.clasificacion] || 0;
     if (campo === 'estatus') return ESTATUS_VALORES.indexOf(c.estatus);
-    return normalizar(c[campo]);
+    return esVacio(c[campo]) ? '' : normalizar(c[campo]);
   }
 
   /* Campos que pueden venir sin dato: las cuentas vacías se agrupan al final
@@ -492,7 +498,9 @@
      El teléfono se compara solo por dígitos, así el orden queda por lada. */
   const CAMPOS_OPCIONALES = {
     fechaCita: c => c.fechaCita || '',
-    telefono: c => soloDigitos(c.telefono)
+    telefono: c => soloDigitos(c.telefono),
+    // La prioridad se compara como dígito ('3' > '2' > '1'); sin clasificar queda vacío.
+    clasificacion: c => (PRIORIDAD[c.clasificacion] ? String(PRIORIDAD[c.clasificacion]) : '')
   };
 
   function ordenar(lista) {
@@ -512,6 +520,12 @@
       }
       const va = valorOrden(a, campo);
       const vb = valorOrden(b, campo);
+      // Un campo sin dato nunca se mezcla con los que sí lo tienen.
+      if (typeof va === 'string') {
+        if (!va && !vb) return a.empresa.localeCompare(b.empresa, 'es');
+        if (!va) return 1;
+        if (!vb) return -1;
+      }
       let cmp;
       if (typeof va === 'number') cmp = va - vb;
       else cmp = String(va).localeCompare(String(vb), 'es');
@@ -613,7 +627,8 @@
     el.cajonEmpresa.textContent = c.empresa;
     el.cajonClasif.textContent = c.clasificacion === 'AAA' ? 'AAA · máxima prioridad'
       : c.clasificacion === 'AA' ? 'AA · alta prioridad'
-      : 'A · prioridad estándar';
+      : c.clasificacion === 'A' ? 'A · prioridad estándar'
+      : 'Clasificación por definir';
 
     const filas = [
       ['Clasificación', mostrar(c.clasificacion)],
@@ -1279,5 +1294,9 @@
     if (enNube()) arrancarNube();
   }
 
-  document.addEventListener('DOMContentLoaded', iniciar);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', iniciar);
+  } else {
+    iniciar();   // el DOM ya estaba listo cuando se cargó este archivo
+  }
 })();
