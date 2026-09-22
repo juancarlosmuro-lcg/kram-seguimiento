@@ -8,7 +8,7 @@
    como "—". No agregues datos inventados.
 
    Las cuentas cuya clasificación, estado, zona o industria todavía no se
-   define llevan "-" en esos campos: la herramienta las muestra como "—",
+   definen llevan "-" en esos campos: la herramienta las muestra como "—",
    las agrupa aparte en los resúmenes y las manda al final al ordenar.
    En cuanto tengas el dato, cámbialo aquí y todo se recalcula solo.
 
@@ -60,12 +60,12 @@ const CUENTAS_INICIALES = [
   {"id": "trenzados-marinos-grupo-ortiz", "empresa": "Trenzados Marinos (Grupo Ortiz)", "clasificacion": "AAA", "estado": "Michoacán", "zona": "Occidente", "industria": "Manufactura", "contacto": "Javier de la Mata Medina", "cargo": "CEO", "telefono": "-", "correo": "fjavier.delamata@grupoortiz.com"},
   {"id": "vivri", "empresa": "VIVRI", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Bienes de Consumo", "contacto": "Luis de la Torre Rábago", "cargo": "Presidente", "telefono": "-", "correo": "luis@vivri.com"},
   {"id": "wendy-colchones", "empresa": "Wendy Colchones", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Bienes de Consumo", "contacto": "Manuel López Castillejos", "cargo": "CEO", "telefono": "-", "correo": "mlc@wendy.com.mx"},
-  {"id": "alipec", "empresa": "Alipec", "clasificacion": "AA", "estado": "Jalisco", "zona": "Occidente", "industria": "Agronegocio", "contacto": "Juan Lorenzo Delgado", "cargo": "Subdirector de Operaciones", "telefono": "-", "correo": "jdelgado@alipec.com"},
+  {"id": "alipec", "empresa": "Alipec", "clasificacion": "AA", "estado": "Jalisco", "zona": "Occidente", "industria": "Agronegocio", "contacto": "Juan Lorenzo Delgado", "cargo": "Subdirector de Operaciones", "telefono": "33 3106 4840", "correo": "jdelgado@alipec.com"},
   {"id": "motsa-montacargas", "empresa": "Motsa Montacargas", "clasificacion": "A", "estado": "Michoacán", "zona": "Occidente", "industria": "Maquinaria", "contacto": "Fernando Torres", "cargo": "Director General", "telefono": "55 2696 3256", "correo": "fernando.t@motsa.com.mx"},
   {"id": "plastic-trends", "empresa": "Plastic Trends", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Manufactura", "contacto": "Lorenza Torres Parmet", "cargo": "CEO", "telefono": "33 1895 2069", "correo": "lorenza.parmet@plastictrends.com.mx"},
-  {"id": "bansi", "empresa": "Bansí", "clasificacion": "-", "estado": "-", "zona": "-", "industria": "-", "contacto": "Jorge de Jesús Montes", "cargo": "CEO", "telefono": "-", "correo": "-"},
-  {"id": "pastelerias-marisa", "empresa": "Pastelerías Marisa", "clasificacion": "-", "estado": "-", "zona": "-", "industria": "-", "contacto": "Marisa Lazo", "cargo": "Director General", "telefono": "-", "correo": "-"},
-  {"id": "el-cuatro", "empresa": "El Cuatro", "clasificacion": "-", "estado": "-", "zona": "-", "industria": "-", "contacto": "Rafael Ramírez", "cargo": "Director de Genética y Ganado", "telefono": "-", "correo": "-"},
-  {"id": "latin-berry-plants", "empresa": "Latin Berry Plants", "clasificacion": "-", "estado": "-", "zona": "-", "industria": "-", "contacto": "Pablo Kersey", "cargo": "Director de Operaciones", "telefono": "-", "correo": "-"},
-  {"id": "global-frut", "empresa": "Global Frut", "clasificacion": "-", "estado": "-", "zona": "-", "industria": "-", "contacto": "Mario Rivas Barragán", "cargo": "CEO", "telefono": "-", "correo": "-"}
+  {"id": "bansi", "empresa": "Bansí", "clasificacion": "AAA", "estado": "-", "zona": "Occidente", "industria": "Servicios Financieros", "contacto": "Jorge de Jesús Montes", "cargo": "CEO", "telefono": "33 3955 9530", "correo": "jmontes@bansi.com.mx"},
+  {"id": "pastelerias-marisa", "empresa": "Pastelerías Marisa", "clasificacion": "AA", "estado": "-", "zona": "Occidente", "industria": "Retail", "contacto": "Marisa Lazo", "cargo": "Director General", "telefono": "33 3156 7254", "correo": "marisa@pasteleriasmarisa.com.mx"},
+  {"id": "el-cuatro", "empresa": "El Cuatro", "clasificacion": "AA", "estado": "-", "zona": "Occidente", "industria": "Alimentos", "contacto": "Rafael Ramírez", "cargo": "Director de Genética y Ganado", "telefono": "37 8786 0686", "correo": "rafaram88@hotmail.com"},
+  {"id": "latin-berry-plants", "empresa": "Latin Berry Plants", "clasificacion": "AA", "estado": "-", "zona": "Golfo", "industria": "Agro", "contacto": "Pablo Kersey", "cargo": "Director de Operaciones", "telefono": "22 1180 5540", "correo": "pkersey@latinberryplants.com"},
+  {"id": "global-frut", "empresa": "Global Frut", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Agro", "contacto": "Mario Rivas Barragán", "cargo": "CEO", "telefono": "-", "correo": "marior@globalfrut.com.mx"}
 ];
