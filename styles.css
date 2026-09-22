@@ -241,6 +241,22 @@ button { font-family: inherit; }
 .btn--peligro { background: var(--color-error); }
 .btn--peligro:hover { background: #A9432F; }
 
+.btn--filtro {
+  padding: 6px var(--space-4);
+  font-size: var(--text-xs);
+  background: transparent;
+  color: var(--green-700);
+  border-color: var(--border-default);
+}
+.btn--filtro:hover { background: var(--green-100); color: var(--green-800); border-color: var(--green-400); }
+.btn--filtro.esta-activo {
+  background: var(--green-800);
+  color: var(--london-mint);
+  border-color: var(--green-800);
+}
+.btn--filtro.esta-activo:hover { background: var(--green-900); color: var(--london-mint); }
+.btn--filtro[hidden] { display: none; }
+
 .btn--texto {
   background: none;
   border: none;
@@ -548,7 +564,7 @@ button { font-family: inherit; }
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--space-1);
+  gap: 6px;
   white-space: nowrap;
 }
 .filtros__conteo {

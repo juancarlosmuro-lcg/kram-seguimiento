@@ -58,7 +58,7 @@
 
   const estado = {
     cuentas: [],
-    filtros: { buscar: '', clasificacion: '', zona: '', industria: '', estatus: '' },
+    filtros: { buscar: '', clasificacion: '', zona: '', industria: '', estatus: '', soloPrioritarias: false },
     orden: { campo: null, dir: 'asc' },   // null = orden original del Excel
     idAbierto: null,
     focoExpandido: false,
@@ -71,6 +71,13 @@
   };
 
   const enNube = () => estado.modo === 'nube';
+
+  /* Lista priorizada (data.js). Se guarda como mapa id -> posición para
+     filtrar y ordenar sin recorrerla en cada comparación. */
+  const PRIORIZADAS = new Map(
+    (typeof LISTA_PRIORITARIA !== 'undefined' && Array.isArray(LISTA_PRIORITARIA) ? LISTA_PRIORITARIA : [])
+      .map((id, i) => [id, i])
+  );
 
   const $ = sel => document.querySelector(sel);
   const el = {};
@@ -417,9 +424,15 @@
     const lista = ordenar(filtrar());
     el.cuerpoTabla.innerHTML = lista.map(fila).join('');
     el.mensajeVacio.hidden = lista.length > 0;
-    el.conteo.textContent = lista.length === estado.cuentas.length
-      ? 'Mostrando las ' + lista.length + ' cuentas'
-      : 'Mostrando ' + lista.length + ' de ' + estado.cuentas.length + ' cuentas';
+    if (estado.filtros.soloPrioritarias) {
+      const m = metricas(lista);
+      el.conteo.textContent = 'Lista priorizada · ' + m.agendadas + ' de ' + m.total +
+        ' con cita (' + m.avance + '%)';
+    } else {
+      el.conteo.textContent = lista.length === estado.cuentas.length
+        ? 'Mostrando las ' + lista.length + ' cuentas'
+        : 'Mostrando ' + lista.length + ' de ' + estado.cuentas.length + ' cuentas';
+    }
   }
 
   /** Actualiza solo la fila tocada: evita repintar la tabla y perder el foco. */
@@ -467,6 +480,7 @@
 
   function coincide(c) {
     const f = estado.filtros;
+    if (f.soloPrioritarias && !PRIORIZADAS.has(c.id)) return false;
     if (f.clasificacion && c.clasificacion !== f.clasificacion) return false;
     if (f.zona && c.zona !== f.zona) return false;
     if (f.industria && c.industria !== f.industria) return false;
@@ -505,6 +519,10 @@
 
   function ordenar(lista) {
     const campo = estado.orden.campo;
+    if (!campo && estado.filtros.soloPrioritarias) {
+      // Sin columna elegida, la lista priorizada se muestra en su propio orden.
+      return lista.slice().sort((a, b) => PRIORIZADAS.get(a.id) - PRIORIZADAS.get(b.id));
+    }
     if (!campo) return lista;                    // orden original del Excel
     const signo = estado.orden.dir === 'asc' ? 1 : -1;
     const opcional = CAMPOS_OPCIONALES[campo];
@@ -534,6 +552,13 @@
     });
   }
 
+  /** Quita el orden por columna y devuelve la tabla a su orden natural. */
+  function limpiarOrden() {
+    estado.orden.campo = null;
+    estado.orden.dir = 'asc';
+    document.querySelectorAll('.tabla th.orden').forEach(th => th.removeAttribute('aria-sort'));
+  }
+
   function alternarOrden(campo) {
     if (estado.orden.campo === campo) {
       estado.orden.dir = estado.orden.dir === 'asc' ? 'desc' : 'asc';
@@ -550,6 +575,17 @@
       }
     });
     renderTabla();
+  }
+
+  function pintarBotonPrioritarias() {
+    if (!PRIORIZADAS.size) { el.btnPrioritarias.hidden = true; return; }
+    const activo = estado.filtros.soloPrioritarias;
+    el.btnPrioritarias.hidden = false;
+    el.btnPrioritarias.textContent = activo
+      ? 'Ver todas las cuentas'
+      : 'Lista priorizada (' + PRIORIZADAS.size + ')';
+    el.btnPrioritarias.classList.toggle('esta-activo', activo);
+    el.btnPrioritarias.setAttribute('aria-pressed', String(activo));
   }
 
   function llenarFiltrosDinamicos() {
@@ -1118,7 +1154,7 @@
       'cajonEmpresa', 'cajonClasif', 'cajonDatos', 'cajonEstatus', 'cajonFecha', 'cajonNotas',
       'btnCerrarCajon', 'modal', 'modalTitulo', 'modalTexto', 'btnModalCancelar', 'btnModalConfirmar',
       'archivoImportar', 'fBuscar', 'fClasificacion', 'fZona', 'fIndustria', 'fEstatus',
-      'acceso', 'accesoNombre', 'accesoClave', 'accesoError', 'btnEntrar', 'btnSalir',
+      'acceso', 'accesoNombre', 'accesoClave', 'accesoError', 'btnEntrar', 'btnSalir', 'btnPrioritarias',
       'bloqueMensajes', 'btnToggleMensajes', 'msjEmpresa', 'msjContacto', 'msjFicha',
       'msjWhats', 'msjAsunto', 'msjCorreo', 'msjTrato', 'btnPrepararMensaje',
       'cuerpoFoco', 'btnVerTodasFoco'];
@@ -1141,8 +1177,19 @@
       });
     });
 
+    el.btnPrioritarias.addEventListener('click', () => {
+      estado.filtros.soloPrioritarias = !estado.filtros.soloPrioritarias;
+      // Al encenderla se quita el orden por columna, para que se vea en el
+      // orden acordado de la lista. Después se puede ordenar como siempre.
+      if (estado.filtros.soloPrioritarias) limpiarOrden();
+      pintarBotonPrioritarias();
+      renderTabla();
+    });
+
     $('#btnLimpiar').addEventListener('click', () => {
       Object.keys(estado.filtros).forEach(k => { estado.filtros[k] = ''; });
+      estado.filtros.soloPrioritarias = false;
+      pintarBotonPrioritarias();
       Object.keys(mapaFiltros).forEach(id => { el[id].value = ''; });
       renderTabla();
       el.fBuscar.focus();
@@ -1287,6 +1334,7 @@
     estado.autor = leerNombre();
     construirCuentas(enNube() ? {} : leerAlmacen());
     llenarFiltrosDinamicos();
+    pintarBotonPrioritarias();
     llenarSelectorEmpresas();
     conectarEventos();
     generarMensajes('');

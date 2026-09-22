@@ -69,3 +69,39 @@ const CUENTAS_INICIALES = [
   {"id": "latin-berry-plants", "empresa": "Latin Berry Plants", "clasificacion": "AA", "estado": "-", "zona": "Golfo", "industria": "Agro", "contacto": "Pablo Kersey", "cargo": "Director de Operaciones", "telefono": "22 1180 5540", "correo": "pkersey@latinberryplants.com"},
   {"id": "global-frut", "empresa": "Global Frut", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Agro", "contacto": "Mario Rivas Barragán", "cargo": "CEO", "telefono": "-", "correo": "marior@globalfrut.com.mx"}
 ];
+
+/* =====================================================================
+   Lista priorizada
+   ---------------------------------------------------------------------
+   Las cuentas que se están trabajando ahora, en el orden acordado. El
+   botón "Lista priorizada" de la tabla muestra solo estas y las presenta
+   en este mismo orden.
+
+   Para cambiarla: agrega, quita o reordena los "id" de abajo. Cada uno
+   debe existir en CUENTAS_INICIALES, escrito igual. Si dejas la lista
+   vacía, el botón desaparece solo.
+   ===================================================================== */
+
+const LISTA_PRIORITARIA = [
+  'bansi',                        //  1. Bansí
+  'productos-de-trigo',           //  2. Productos de Trigo
+  'oleofinos',                    //  3. Oleofinos
+  'grupo-vida',                   //  4. Grupo Vida
+  'grupo-urrea',                  //  5. Grupo URREA
+  'pastelerias-marisa',           //  6. Pastelerías Marisa
+  'alianza-team',                 //  7. Alianza Team
+  'tajin',                        //  8. Tajín
+  'frutas-finas-de-tancitaro',    //  9. Frutas Finas de Tancítaro
+  'grupo-premier-de-occidente',   // 10. Grupo Premier de Occidente
+  'natura-biofoods',              // 11. Natura BioFoods
+  'el-gran-chaparral',            // 12. El Gran Chaparral
+  'el-cuatro',                    // 13. El Cuatro
+  'toyo-foods',                   // 14. Toyo Foods
+  'alipec',                       // 15. Alipec
+  'price-shoes',                  // 16. Price Shoes
+  'grupo-tron',                   // 17. Grupo TRON
+  'motsa-montacargas',            // 18. Motsa Montacargas
+  'limones-monica',               // 19. Limones Mónica
+  'latin-berry-plants',           // 20. Latin Berry Plants
+  'global-frut'                   // 21. Global Frut
+];
