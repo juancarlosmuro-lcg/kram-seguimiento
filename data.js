@@ -39,7 +39,7 @@ const CUENTAS_INICIALES = [
   {"id": "natura-biofoods", "empresa": "Natura BioFoods", "clasificacion": "A", "estado": "Jalisco", "zona": "Occidente", "industria": "Bienes de Consumo", "contacto": "Enrique Gómez", "cargo": "Director de Planeación Estratégica", "telefono": "33 1066 0441", "correo": "enrique.gomez@nbf.mx"},
   {"id": "limones-monica", "empresa": "Limones Mónica", "clasificacion": "A", "estado": "Jalisco", "zona": "Occidente", "industria": "Agronegocio", "contacto": "Sergio Cortés Domínguez", "cargo": "Dueño", "telefono": "23 2124 8756", "correo": "sergioc@limonik.mx"},
   {"id": "toyo-foods", "empresa": "Toyo Foods", "clasificacion": "AA", "estado": "Jalisco", "zona": "Occidente", "industria": "Retail", "contacto": "Kido Ishikawa Katagiri", "cargo": "Director General", "telefono": "-", "correo": "kishikawa@toyofoods.com.mx"},
-  {"id": "price-shoes", "empresa": "Price Shoes", "clasificacion": "AAA", "estado": "Ciudad de México", "zona": "Metro", "industria": "Bienes de Consumo", "contacto": "Luis Vergara", "cargo": "Director General Adjunto", "telefono": "55 7928 4961", "correo": "lvergara@priceshoes.com"},
+  {"id": "price-shoes", "empresa": "Price Shoes", "clasificacion": "AAA", "estado": "Ciudad de México", "zona": "Metro", "industria": "Bienes de Consumo", "contacto": "Carlos Schatz", "cargo": "CEO", "telefono": "-", "correo": "cschatz@priceshoes.com"},
   {"id": "productos-de-consumo-z", "empresa": "Productos de Consumo Z", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Retail", "contacto": "Celia Martínez Fernández", "cargo": "Directora Retail", "telefono": "-", "correo": "cmartinez@pcz.com.mx"},
   {"id": "grupo-merza", "empresa": "Grupo MERZA", "clasificacion": "AAA", "estado": "Michoacán", "zona": "Occidente", "industria": "Retail", "contacto": "Guillermo Valdés Vega", "cargo": "Presidente", "telefono": "-", "correo": "gvega@merza.com"},
   {"id": "super-kiosko", "empresa": "Super Kiosko", "clasificacion": "AAA", "estado": "Colima", "zona": "Occidente", "industria": "Retail", "contacto": "Fernando Velasco Márquez", "cargo": "CEO", "telefono": "-", "correo": "fvelasco@mikiosko.mx"},
@@ -67,7 +67,8 @@ const CUENTAS_INICIALES = [
   {"id": "pastelerias-marisa", "empresa": "Pastelerías Marisa", "clasificacion": "AA", "estado": "-", "zona": "Occidente", "industria": "Retail", "contacto": "Marisa Lazo", "cargo": "Director General", "telefono": "33 3156 7254", "correo": "marisa@pasteleriasmarisa.com.mx"},
   {"id": "el-cuatro", "empresa": "El Cuatro", "clasificacion": "AA", "estado": "-", "zona": "Occidente", "industria": "Alimentos", "contacto": "Rafael Ramírez", "cargo": "Director de Genética y Ganado", "telefono": "37 8786 0686", "correo": "rafaram88@hotmail.com"},
   {"id": "latin-berry-plants", "empresa": "Latin Berry Plants", "clasificacion": "AA", "estado": "-", "zona": "Golfo", "industria": "Agro", "contacto": "Pablo Kersey", "cargo": "Director de Operaciones", "telefono": "22 1180 5540", "correo": "pkersey@latinberryplants.com"},
-  {"id": "global-frut", "empresa": "Global Frut", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Agro", "contacto": "Mario Rivas Barragán", "cargo": "CEO", "telefono": "-", "correo": "marior@globalfrut.com.mx"}
+  {"id": "global-frut", "empresa": "Global Frut", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Agro", "contacto": "Mario Rivas Barragán", "cargo": "CEO", "telefono": "-", "correo": "marior@globalfrut.com.mx"},
+  {"id": "grupo-ginez", "empresa": "Grupo Ginez", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Químicos", "contacto": "Jahaziel Ginez Luna", "cargo": "Director General", "telefono": "-", "correo": "jginez@grupoginez.com"}
 ];
 
 /* =====================================================================
@@ -103,5 +104,6 @@ const LISTA_PRIORITARIA = [
   'motsa-montacargas',            // 18. Motsa Montacargas
   'limones-monica',               // 19. Limones Mónica
   'latin-berry-plants',           // 20. Latin Berry Plants
-  'global-frut'                   // 21. Global Frut
+  'global-frut',                  // 21. Global Frut
+  'grupo-ginez'                    // 22. Grupo Ginez
 ];
