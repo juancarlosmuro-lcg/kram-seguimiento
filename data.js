@@ -68,7 +68,8 @@ const CUENTAS_INICIALES = [
   {"id": "el-cuatro", "empresa": "El Cuatro", "clasificacion": "AA", "estado": "-", "zona": "Occidente", "industria": "Alimentos", "contacto": "Rafael Ramírez", "cargo": "Director de Genética y Ganado", "telefono": "37 8786 0686", "correo": "rafaram88@hotmail.com"},
   {"id": "latin-berry-plants", "empresa": "Latin Berry Plants", "clasificacion": "AA", "estado": "-", "zona": "Golfo", "industria": "Agro", "contacto": "Pablo Kersey", "cargo": "Director de Operaciones", "telefono": "22 1180 5540", "correo": "pkersey@latinberryplants.com"},
   {"id": "global-frut", "empresa": "Global Frut", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Agro", "contacto": "Mario Rivas Barragán", "cargo": "CEO", "telefono": "-", "correo": "marior@globalfrut.com.mx"},
-  {"id": "grupo-ginez", "empresa": "Grupo Ginez", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Químicos", "contacto": "Jahaziel Ginez Luna", "cargo": "Director General", "telefono": "-", "correo": "jginez@grupoginez.com"}
+  {"id": "grupo-ginez", "empresa": "Grupo Ginez", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Químicos", "contacto": "Jahaziel Ginez Luna", "cargo": "Director General", "telefono": "-", "correo": "jginez@grupoginez.com"},
+  {"id": "agrana", "empresa": "Agrana", "clasificacion": "AA", "estado": "-", "zona": "Occidente", "industria": "Alimentos", "contacto": "Rafael Rodríguez", "cargo": "Gerente de Ventas", "telefono": "-", "correo": "rafael.rodriguez@agrana.com"}
 ];
 
 /* =====================================================================
@@ -81,29 +82,34 @@ const CUENTAS_INICIALES = [
    Para cambiarla: agrega, quita o reordena los "id" de abajo. Cada uno
    debe existir en CUENTAS_INICIALES, escrito igual. Si dejas la lista
    vacía, el botón desaparece solo.
+
+   "Kiosko" ya estaba dado de alta como "Super Kiosko" (mismo contacto,
+   mismo correo): se usa esa cuenta en vez de crear una duplicada.
    ===================================================================== */
 
 const LISTA_PRIORITARIA = [
-  'bansi',                        //  1. Bansí
-  'productos-de-trigo',           //  2. Productos de Trigo
-  'oleofinos',                    //  3. Oleofinos
-  'grupo-vida',                   //  4. Grupo Vida
-  'grupo-urrea',                  //  5. Grupo URREA
-  'pastelerias-marisa',           //  6. Pastelerías Marisa
-  'alianza-team',                 //  7. Alianza Team
-  'tajin',                        //  8. Tajín
-  'frutas-finas-de-tancitaro',    //  9. Frutas Finas de Tancítaro
-  'grupo-premier-de-occidente',   // 10. Grupo Premier de Occidente
-  'natura-biofoods',              // 11. Natura BioFoods
-  'el-gran-chaparral',            // 12. El Gran Chaparral
-  'el-cuatro',                    // 13. El Cuatro
-  'toyo-foods',                   // 14. Toyo Foods
-  'alipec',                       // 15. Alipec
-  'price-shoes',                  // 16. Price Shoes
-  'grupo-tron',                   // 17. Grupo TRON
-  'motsa-montacargas',            // 18. Motsa Montacargas
-  'limones-monica',               // 19. Limones Mónica
-  'latin-berry-plants',           // 20. Latin Berry Plants
-  'global-frut',                  // 21. Global Frut
-  'grupo-ginez'                    // 22. Grupo Ginez
+  'pastelerias-marisa',         //  1. Pastelerías Marisa
+  'bansi',                      //  2. Bansí
+  'toyo-foods',                 //  3. Toyo Foods
+  'agrana',                     //  4. Agrana
+  'productos-de-trigo',         //  5. Productos de Trigo
+  'oleofinos',                  //  6. Oleofinos
+  'grupo-vida',                 //  7. Grupo Vida
+  'grupo-urrea',                //  8. Grupo URREA
+  'alianza-team',               //  9. Alianza Team
+  'tajin',                      // 10. Tajín
+  'frutas-finas-de-tancitaro',  // 11. Frutas Finas de Tancítaro
+  'grupo-premier-de-occidente', // 12. Grupo Premier de Occidente
+  'natura-biofoods',            // 13. Natura BioFoods
+  'el-gran-chaparral',          // 14. El Gran Chaparral
+  'el-cuatro',                  // 15. El Cuatro
+  'alipec',                     // 16. Alipec
+  'price-shoes',                // 17. Price Shoes
+  'grupo-tron',                 // 18. Grupo TRON
+  'motsa-montacargas',          // 19. Motsa Montacargas
+  'limones-monica',             // 20. Limones Mónica
+  'latin-berry-plants',         // 21. Latin Berry Plants
+  'global-frut',                // 22. Global Frut
+  'grupo-ginez',                // 23. Grupo Ginez
+  'super-kiosko'                // 24. Kiosko (Super Kiosko)
 ];

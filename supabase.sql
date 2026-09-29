@@ -21,9 +21,15 @@ create table if not exists public.seguimiento (
   estatus          text        not null default 'Pendiente',
   fecha_cita       date,
   notas            text        default '',
+  contactado       boolean     not null default false,
   actualizado_por  text        default '',
   actualizado_en   timestamptz not null default now()
 );
+
+-- Si la tabla ya existía de una versión anterior de la herramienta (sin la
+-- columna "contactado"), esto la agrega sin tocar las filas que ya haya.
+alter table public.seguimiento
+  add column if not exists contactado boolean not null default false;
 
 comment on table public.seguimiento is
   'Seguimiento comercial KRAM. Una fila por cuenta trabajada; la base de cuentas vive en data.js.';

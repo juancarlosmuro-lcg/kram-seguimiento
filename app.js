@@ -51,6 +51,7 @@
     ['estatus',        'Estatus de cita'],
     ['fechaCita',      'Fecha de consecución de cita'],
     ['notas',          'Notas'],
+    ['contactado',     'Contactada (lista priorizada)'],
     ['id',             'id']
   ];
 
@@ -152,8 +153,10 @@
     const seguimiento = {};
     estado.cuentas.forEach(c => {
       // Solo se guarda lo que el usuario capturó; la base viene siempre de data.js.
-      if (c.estatus !== ESTATUS_INICIAL || c.fechaCita || c.notas) {
-        seguimiento[c.id] = { estatus: c.estatus, fechaCita: c.fechaCita, notas: c.notas };
+      if (c.estatus !== ESTATUS_INICIAL || c.fechaCita || c.notas || c.contactado) {
+        seguimiento[c.id] = {
+          estatus: c.estatus, fechaCita: c.fechaCita, notas: c.notas, contactado: c.contactado
+        };
       }
     });
     estado.ultimoGuardado = new Date().toISOString();
@@ -185,6 +188,7 @@
       estatus: ESTATUS_VALORES.indexOf(extra.estatus) !== -1 ? extra.estatus : ESTATUS_INICIAL,
       fechaCita: typeof extra.fechaCita === 'string' ? extra.fechaCita : '',
       notas: typeof extra.notas === 'string' ? extra.notas : '',
+      contactado: !!extra.contactado,
       actualizadoPor: typeof extra.actualizadoPor === 'string' ? extra.actualizadoPor : '',
       actualizadoEn: typeof extra.actualizadoEn === 'string' ? extra.actualizadoEn : ''
     };
@@ -394,6 +398,10 @@
     return '<tr data-id="' + escapar(c.id) + '">' +
       '<td class="col-empresa" data-label="Empresa">' +
         '<span class="celda-empresa">' +
+          '<label class="chk-contactado" title="Marcar como contactada">' +
+            '<input type="checkbox" data-accion="contactado"' + (c.contactado ? ' checked' : '') +
+              ' aria-label="' + escapar(c.empresa) + ' contactada">' +
+          '</label>' +
           '<button class="empresa-btn" type="button" data-accion="detalle">' + escapar(c.empresa) + '</button>' +
           (c.notas ? '<span class="marca-nota" title="Tiene notas"></span>' : '') +
         '</span>' +
@@ -420,19 +428,25 @@
     '</tr>';
   }
 
-  function renderTabla() {
-    const lista = ordenar(filtrar());
-    el.cuerpoTabla.innerHTML = lista.map(fila).join('');
-    el.mensajeVacio.hidden = lista.length > 0;
+  /** Texto de "Mostrando X de Y", o el resumen de avance de la lista priorizada. */
+  function renderConteo(lista) {
     if (estado.filtros.soloPrioritarias) {
       const m = metricas(lista);
-      el.conteo.textContent = 'Lista priorizada · ' + m.agendadas + ' de ' + m.total +
-        ' con cita (' + m.avance + '%)';
+      const contactadas = lista.filter(c => c.contactado).length;
+      el.conteo.textContent = 'Lista priorizada · ' + contactadas + ' de ' + m.total +
+        ' contactadas · ' + m.agendadas + ' con cita (' + m.avance + '%)';
     } else {
       el.conteo.textContent = lista.length === estado.cuentas.length
         ? 'Mostrando las ' + lista.length + ' cuentas'
         : 'Mostrando ' + lista.length + ' de ' + estado.cuentas.length + ' cuentas';
     }
+  }
+
+  function renderTabla() {
+    const lista = ordenar(filtrar());
+    el.cuerpoTabla.innerHTML = lista.map(fila).join('');
+    el.mensajeVacio.hidden = lista.length > 0;
+    renderConteo(lista);
   }
 
   /** Actualiza solo la fila tocada: evita repintar la tabla y perder el foco. */
@@ -451,6 +465,9 @@
       if (fecha.value !== c.fechaCita) fecha.value = c.fechaCita;
       fecha.classList.toggle('fecha-inline--alerta', faltaFecha(c));
     }
+    const chk = tr.querySelector('[data-accion="contactado"]');
+    if (chk && chk.checked !== c.contactado) chk.checked = c.contactado;
+
     const celda = tr.querySelector('.celda-empresa');
     const marca = celda.querySelector('.marca-nota');
     if (c.notas && !marca) {
@@ -634,7 +651,14 @@
       ? !!(campoOrden && Object.prototype.hasOwnProperty.call(cambios, campoOrden))
       : (campoOrden === 'estatus' || campoOrden === 'fechaCita');
     if (afectaOrden || !coincide(c)) renderTabla();
-    else refrescarFila(id);
+    else {
+      refrescarFila(id);
+      // "Contactado" no reordena ni filtra, pero el conteo de la lista
+      // priorizada sí depende de él: se recalcula sin repintar la tabla.
+      if (estado.filtros.soloPrioritarias && cambios && 'contactado' in cambios) {
+        renderConteo(ordenar(filtrar()));
+      }
+    }
     if (estado.idAbierto === id) pintarCajon(c);
   }
 
@@ -964,7 +988,10 @@
     'fechacita': 'fechaCita',
     'fecha de consecucion de cita': 'fechaCita',
     'fecha de consecucion': 'fechaCita',
-    'notas': 'notas'
+    'notas': 'notas',
+    'contactado': 'contactado',
+    'contactada': 'contactado',
+    'contactada (lista priorizada)': 'contactado'
   };
 
   function registrosDesdeCsv(texto) {
@@ -1011,6 +1038,11 @@
         else if (/^\d{4}-\d{2}-\d{2}$/.test(f)) { cuenta.fechaCita = f; cambio = true; }
       }
       if (r.notas !== undefined) { cuenta.notas = String(r.notas); cambio = true; }
+      if (r.contactado !== undefined) {
+        const v = normalizar(String(r.contactado)).trim();
+        cuenta.contactado = (v === 'true' || v === '1' || v === 'si' || v === 'x');
+        cambio = true;
+      }
       if (cambio) { aplicados++; tocadas.push(cuenta); }
     });
 
@@ -1157,7 +1189,7 @@
       'acceso', 'accesoNombre', 'accesoClave', 'accesoError', 'btnEntrar', 'btnSalir', 'btnPrioritarias',
       'bloqueMensajes', 'btnToggleMensajes', 'msjEmpresa', 'msjContacto', 'msjFicha',
       'msjWhats', 'msjAsunto', 'msjCorreo', 'msjTrato', 'btnPrepararMensaje',
-      'cuerpoFoco', 'btnVerTodasFoco'];
+      'cuerpoFoco', 'btnVerTodasFoco', 'tablaCuentas'];
     ids.forEach(id => { el[id] = document.getElementById(id); });
     el.lectura = el.lecturaEjecutiva;
     el.conteo = el.conteoResultados;
@@ -1182,6 +1214,7 @@
       // Al encenderla se quita el orden por columna, para que se vea en el
       // orden acordado de la lista. Después se puede ordenar como siempre.
       if (estado.filtros.soloPrioritarias) limpiarOrden();
+      el.tablaCuentas.classList.toggle('tabla--prioritarias', estado.filtros.soloPrioritarias);
       pintarBotonPrioritarias();
       renderTabla();
     });
@@ -1210,6 +1243,10 @@
       const accion = e.target.dataset.accion;
       if (accion === 'estatus') actualizar(tr.dataset.id, { estatus: e.target.value });
       if (accion === 'fecha') actualizar(tr.dataset.id, { fechaCita: e.target.value });
+      if (accion === 'contactado') {
+        actualizar(tr.dataset.id, { contactado: e.target.checked },
+          { mensaje: e.target.checked ? 'Marcada como contactada' : 'Se quitó la marca de contactada' });
+      }
     });
 
     el.cuerpoTabla.addEventListener('click', e => {
