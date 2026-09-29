@@ -69,6 +69,7 @@ const CUENTAS_INICIALES = [
   {"id": "latin-berry-plants", "empresa": "Latin Berry Plants", "clasificacion": "AA", "estado": "-", "zona": "Golfo", "industria": "Agro", "contacto": "Pablo Kersey", "cargo": "Director de Operaciones", "telefono": "22 1180 5540", "correo": "pkersey@latinberryplants.com"},
   {"id": "global-frut", "empresa": "Global Frut", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Agro", "contacto": "Mario Rivas Barragán", "cargo": "CEO", "telefono": "-", "correo": "marior@globalfrut.com.mx"},
   {"id": "grupo-ginez", "empresa": "Grupo Ginez", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Químicos", "contacto": "Jahaziel Ginez Luna", "cargo": "Director General", "telefono": "-", "correo": "jginez@grupoginez.com"},
+  {"id": "norjal", "empresa": "Norjal", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Bienes de Consumo", "contacto": "Diego Ponce", "cargo": "Co-Fundador y Presidente", "telefono": "-", "correo": "d.ponce@norjal.com"},
   {"id": "agrana", "empresa": "Agrana", "clasificacion": "AA", "estado": "-", "zona": "Occidente", "industria": "Alimentos", "contacto": "Rafael Rodríguez", "cargo": "Gerente de Ventas", "telefono": "-", "correo": "rafael.rodriguez@agrana.com"}
 ];
 
@@ -90,26 +91,27 @@ const CUENTAS_INICIALES = [
 const LISTA_PRIORITARIA = [
   'pastelerias-marisa',         //  1. Pastelerías Marisa
   'bansi',                      //  2. Bansí
-  'toyo-foods',                 //  3. Toyo Foods
-  'agrana',                     //  4. Agrana
-  'productos-de-trigo',         //  5. Productos de Trigo
-  'oleofinos',                  //  6. Oleofinos
-  'grupo-vida',                 //  7. Grupo Vida
-  'grupo-urrea',                //  8. Grupo URREA
-  'alianza-team',               //  9. Alianza Team
-  'tajin',                      // 10. Tajín
-  'frutas-finas-de-tancitaro',  // 11. Frutas Finas de Tancítaro
-  'grupo-premier-de-occidente', // 12. Grupo Premier de Occidente
-  'natura-biofoods',            // 13. Natura BioFoods
-  'el-gran-chaparral',          // 14. El Gran Chaparral
-  'el-cuatro',                  // 15. El Cuatro
-  'alipec',                     // 16. Alipec
-  'price-shoes',                // 17. Price Shoes
-  'grupo-tron',                 // 18. Grupo TRON
-  'motsa-montacargas',          // 19. Motsa Montacargas
-  'limones-monica',             // 20. Limones Mónica
-  'latin-berry-plants',         // 21. Latin Berry Plants
-  'global-frut',                // 22. Global Frut
-  'grupo-ginez',                // 23. Grupo Ginez
-  'super-kiosko'                // 24. Kiosko (Super Kiosko)
+  'norjal',                     //  3. Norjal
+  'toyo-foods',                 //  4. Toyo Foods
+  'agrana',                     //  5. Agrana
+  'productos-de-trigo',         //  6. Productos de Trigo
+  'oleofinos',                  //  7. Oleofinos
+  'grupo-vida',                 //  8. Grupo Vida
+  'grupo-urrea',                //  9. Grupo URREA
+  'alianza-team',               // 10. Alianza Team
+  'tajin',                      // 11. Tajín
+  'frutas-finas-de-tancitaro',  // 12. Frutas Finas de Tancítaro
+  'grupo-premier-de-occidente', // 13. Grupo Premier de Occidente
+  'natura-biofoods',            // 14. Natura BioFoods
+  'el-gran-chaparral',          // 15. El Gran Chaparral
+  'el-cuatro',                  // 16. El Cuatro
+  'alipec',                     // 17. Alipec
+  'price-shoes',                // 18. Price Shoes
+  'grupo-tron',                 // 19. Grupo TRON
+  'motsa-montacargas',          // 20. Motsa Montacargas
+  'limones-monica',             // 21. Limones Mónica
+  'latin-berry-plants',         // 22. Latin Berry Plants
+  'global-frut',                // 23. Global Frut
+  'grupo-ginez',                // 24. Grupo Ginez
+  'super-kiosko'                // 25. Kiosko (Super Kiosko)
 ];
