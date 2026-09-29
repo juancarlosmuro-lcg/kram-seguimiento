@@ -56,7 +56,6 @@
       estatus: fila.estatus || 'Pendiente',
       fechaCita: fila.fecha_cita || '',
       notas: fila.notas || '',
-      contactado: !!fila.contactado,
       actualizadoPor: fila.actualizado_por || '',
       actualizadoEn: fila.actualizado_en || ''
     };
@@ -70,7 +69,6 @@
       estatus: cuenta.estatus,
       fecha_cita: cuenta.fechaCita || null,
       notas: cuenta.notas || '',
-      contactado: !!cuenta.contactado,
       actualizado_por: autor || '',
       actualizado_en: new Date().toISOString()
     };

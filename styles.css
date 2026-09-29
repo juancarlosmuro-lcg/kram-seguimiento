@@ -701,20 +701,6 @@ textarea.campo__control { resize: vertical; line-height: var(--leading-normal); 
   flex: none;
 }
 
-/* Casilla de "ya contactada": solo se muestra dentro de la Lista priorizada.
-   El dato se guarda siempre; nada más cambia si se ve o no. */
-.chk-contactado {
-  display: none;
-  flex: none;
-  cursor: pointer;
-}
-.tabla--prioritarias .chk-contactado { display: inline-flex; }
-.chk-contactado input {
-  width: 17px; height: 17px;
-  margin: 0;
-  cursor: pointer;
-  accent-color: var(--green-600);
-}
 
 .tabla .vacio-dato { color: var(--text-muted); }
 .tabla .celda-contacto { line-height: var(--leading-snug); }
