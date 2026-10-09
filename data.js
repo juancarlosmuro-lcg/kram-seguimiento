@@ -70,7 +70,9 @@ const CUENTAS_INICIALES = [
   {"id": "global-frut", "empresa": "Global Frut", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Agro", "contacto": "Mario Rivas Barragán", "cargo": "CEO", "telefono": "-", "correo": "marior@globalfrut.com.mx"},
   {"id": "grupo-ginez", "empresa": "Grupo Ginez", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Químicos", "contacto": "Jahaziel Ginez Luna", "cargo": "Director General", "telefono": "-", "correo": "jginez@grupoginez.com"},
   {"id": "norjal", "empresa": "Norjal", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Bienes de Consumo", "contacto": "Diego Ponce", "cargo": "Co-Fundador y Presidente", "telefono": "-", "correo": "d.ponce@norjal.com"},
-  {"id": "agrana", "empresa": "Agrana", "clasificacion": "AA", "estado": "-", "zona": "Occidente", "industria": "Alimentos", "contacto": "Rafael Rodríguez", "cargo": "Gerente de Ventas", "telefono": "-", "correo": "rafael.rodriguez@agrana.com"}
+  {"id": "agrana", "empresa": "Agrana", "clasificacion": "AA", "estado": "-", "zona": "Occidente", "industria": "Alimentos", "contacto": "Rafael Rodríguez", "cargo": "Gerente de Ventas", "telefono": "-", "correo": "rafael.rodriguez@agrana.com"},
+  {"id": "hortifrut", "empresa": "Hortifrut", "clasificacion": "AAA", "estado": "-", "zona": "Occidente", "industria": "Agrícola", "contacto": "Rigoberto Guerrero", "cargo": "CEO", "telefono": "-", "correo": "rguerrero@hortifrut.com"},
+  {"id": "gpa", "empresa": "GPA (General de Productos para el Agua)", "clasificacion": "A", "estado": "-", "zona": "Occidente", "industria": "Material de Construcción", "contacto": "-", "cargo": "-", "telefono": "-", "correo": "-"}
 ];
 
 /* =====================================================================
@@ -94,24 +96,26 @@ const LISTA_PRIORITARIA = [
   'norjal',                     //  3. Norjal
   'toyo-foods',                 //  4. Toyo Foods
   'agrana',                     //  5. Agrana
-  'productos-de-trigo',         //  6. Productos de Trigo
-  'oleofinos',                  //  7. Oleofinos
-  'grupo-vida',                 //  8. Grupo Vida
-  'grupo-urrea',                //  9. Grupo URREA
-  'alianza-team',               // 10. Alianza Team
-  'tajin',                      // 11. Tajín
-  'frutas-finas-de-tancitaro',  // 12. Frutas Finas de Tancítaro
-  'grupo-premier-de-occidente', // 13. Grupo Premier de Occidente
-  'natura-biofoods',            // 14. Natura BioFoods
-  'el-gran-chaparral',          // 15. El Gran Chaparral
-  'el-cuatro',                  // 16. El Cuatro
-  'alipec',                     // 17. Alipec
-  'price-shoes',                // 18. Price Shoes
-  'grupo-tron',                 // 19. Grupo TRON
-  'motsa-montacargas',          // 20. Motsa Montacargas
-  'limones-monica',             // 21. Limones Mónica
-  'latin-berry-plants',         // 22. Latin Berry Plants
-  'global-frut',                // 23. Global Frut
-  'grupo-ginez',                // 24. Grupo Ginez
-  'super-kiosko'                // 25. Kiosko (Super Kiosko)
+  'hortifrut',                  //  6. Hortifrut
+  'productos-de-trigo',         //  7. Productos de Trigo
+  'gpa',                        //  8. GPA (General de Productos para el Agua)
+  'oleofinos',                  //  9. Oleofinos
+  'grupo-vida',                 // 10. Grupo Vida
+  'grupo-urrea',                // 11. Grupo URREA
+  'alianza-team',               // 12. Alianza Team
+  'tajin',                      // 13. Tajín
+  'frutas-finas-de-tancitaro',  // 14. Frutas Finas de Tancítaro
+  'grupo-premier-de-occidente', // 15. Grupo Premier de Occidente
+  'natura-biofoods',            // 16. Natura BioFoods
+  'el-gran-chaparral',          // 17. El Gran Chaparral
+  'el-cuatro',                  // 18. El Cuatro
+  'alipec',                     // 19. Alipec
+  'price-shoes',                // 20. Price Shoes
+  'grupo-tron',                 // 21. Grupo TRON
+  'motsa-montacargas',          // 22. Motsa Montacargas
+  'limones-monica',             // 23. Limones Mónica
+  'latin-berry-plants',         // 24. Latin Berry Plants
+  'global-frut',                // 25. Global Frut
+  'grupo-ginez',                // 26. Grupo Ginez
+  'super-kiosko'                // 27. Kiosko (Super Kiosko)
 ];
