@@ -72,7 +72,8 @@ const CUENTAS_INICIALES = [
   {"id": "norjal", "empresa": "Norjal", "clasificacion": "A", "estado": "Jalisco", "zona": "Occidente", "industria": "Bienes de Consumo", "contacto": "Diego Ponce", "cargo": "Co-Fundador y Presidente", "telefono": "-", "correo": "d.ponce@norjal.com"},
   {"id": "agrana", "empresa": "Agrana", "clasificacion": "AA", "estado": "Michoacán", "zona": "Occidente", "industria": "Alimentos", "contacto": "Rafael Rodríguez", "cargo": "Gerente de Ventas", "telefono": "-", "correo": "rafael.rodriguez@agrana.com"},
   {"id": "hortifrut", "empresa": "Hortifrut", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Agrícola", "contacto": "Rigoberto Guerrero", "cargo": "CEO", "telefono": "-", "correo": "rguerrero@hortifrut.com"},
-  {"id": "gpa", "empresa": "GPA (General de Productos para el Agua)", "clasificacion": "A", "estado": "Jalisco", "zona": "Occidente", "industria": "Material de Construcción", "contacto": "-", "cargo": "-", "telefono": "-", "correo": "-"}
+  {"id": "gpa", "empresa": "GPA (General de Productos para el Agua)", "clasificacion": "A", "estado": "Jalisco", "zona": "Occidente", "industria": "Material de Construcción", "contacto": "-", "cargo": "-", "telefono": "-", "correo": "-"},
+  {"id": "pisa", "empresa": "PiSA", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Farmacéutico", "contacto": "Alejandro Troya", "cargo": "Chief Corporate Officer", "telefono": "33 2184 9976", "correo": "atroya@pisa.com.mx"}
 ];
 
 /* =====================================================================
@@ -101,21 +102,22 @@ const LISTA_PRIORITARIA = [
   'gpa',                        //  8. GPA (General de Productos para el Agua)
   'oleofinos',                  //  9. Oleofinos
   'grupo-vida',                 // 10. Grupo Vida
-  'grupo-urrea',                // 11. Grupo URREA
-  'alianza-team',               // 12. Alianza Team
-  'tajin',                      // 13. Tajín
-  'frutas-finas-de-tancitaro',  // 14. Frutas Finas de Tancítaro
-  'grupo-premier-de-occidente', // 15. Grupo Premier de Occidente
-  'natura-biofoods',            // 16. Natura BioFoods
-  'el-gran-chaparral',          // 17. El Gran Chaparral
-  'el-cuatro',                  // 18. El Cuatro
-  'alipec',                     // 19. Alipec
-  'price-shoes',                // 20. Price Shoes
-  'grupo-tron',                 // 21. Grupo TRON
-  'motsa-montacargas',          // 22. Motsa Montacargas
-  'limones-monica',             // 23. Limones Mónica
-  'latin-berry-plants',         // 24. Latin Berry Plants
-  'global-frut',                // 25. Global Frut
-  'grupo-ginez',                // 26. Grupo Ginez
-  'super-kiosko'                // 27. Kiosko (Super Kiosko)
+  'pisa',                       // 11. PiSA
+  'grupo-urrea',                // 12. Grupo URREA
+  'alianza-team',               // 13. Alianza Team
+  'tajin',                      // 14. Tajín
+  'frutas-finas-de-tancitaro',  // 15. Frutas Finas de Tancítaro
+  'grupo-premier-de-occidente', // 16. Grupo Premier de Occidente
+  'natura-biofoods',            // 17. Natura BioFoods
+  'el-gran-chaparral',          // 18. El Gran Chaparral
+  'el-cuatro',                  // 19. El Cuatro
+  'alipec',                     // 20. Alipec
+  'price-shoes',                // 21. Price Shoes
+  'grupo-tron',                 // 22. Grupo TRON
+  'motsa-montacargas',          // 23. Motsa Montacargas
+  'limones-monica',             // 24. Limones Mónica
+  'latin-berry-plants',         // 25. Latin Berry Plants
+  'global-frut',                // 26. Global Frut
+  'grupo-ginez',                // 27. Grupo Ginez
+  'super-kiosko'                // 28. Kiosko (Super Kiosko)
 ];
