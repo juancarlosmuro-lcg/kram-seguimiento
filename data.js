@@ -108,16 +108,17 @@ const LISTA_PRIORITARIA = [
   'tajin',                      // 14. Tajín
   'frutas-finas-de-tancitaro',  // 15. Frutas Finas de Tancítaro
   'grupo-premier-de-occidente', // 16. Grupo Premier de Occidente
-  'natura-biofoods',            // 17. Natura BioFoods
-  'el-gran-chaparral',          // 18. El Gran Chaparral
-  'el-cuatro',                  // 19. El Cuatro
-  'alipec',                     // 20. Alipec
-  'price-shoes',                // 21. Price Shoes
-  'grupo-tron',                 // 22. Grupo TRON
-  'motsa-montacargas',          // 23. Motsa Montacargas
-  'limones-monica',             // 24. Limones Mónica
-  'latin-berry-plants',         // 25. Latin Berry Plants
-  'global-frut',                // 26. Global Frut
-  'grupo-ginez',                // 27. Grupo Ginez
-  'super-kiosko'                // 28. Kiosko (Super Kiosko)
+  'plastic-trends',             // 17. Plastic Trends
+  'natura-biofoods',            // 18. Natura BioFoods
+  'el-gran-chaparral',          // 19. El Gran Chaparral
+  'el-cuatro',                  // 20. El Cuatro
+  'alipec',                     // 21. Alipec
+  'price-shoes',                // 22. Price Shoes
+  'grupo-tron',                 // 23. Grupo TRON
+  'motsa-montacargas',          // 24. Motsa Montacargas
+  'limones-monica',             // 25. Limones Mónica
+  'latin-berry-plants',         // 26. Latin Berry Plants
+  'global-frut',                // 27. Global Frut
+  'grupo-ginez',                // 28. Grupo Ginez
+  'super-kiosko'                // 29. Kiosko (Super Kiosko)
 ];
