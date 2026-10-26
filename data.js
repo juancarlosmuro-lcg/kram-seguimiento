@@ -73,7 +73,9 @@ const CUENTAS_INICIALES = [
   {"id": "agrana", "empresa": "Agrana", "clasificacion": "AA", "estado": "Michoacán", "zona": "Occidente", "industria": "Alimentos", "contacto": "Rafael Rodríguez", "cargo": "Gerente de Ventas", "telefono": "-", "correo": "rafael.rodriguez@agrana.com"},
   {"id": "hortifrut", "empresa": "Hortifrut", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Agrícola", "contacto": "Rigoberto Guerrero", "cargo": "CEO", "telefono": "-", "correo": "rguerrero@hortifrut.com"},
   {"id": "gpa", "empresa": "GPA (General de Productos para el Agua)", "clasificacion": "A", "estado": "Jalisco", "zona": "Occidente", "industria": "Material de Construcción", "contacto": "-", "cargo": "-", "telefono": "-", "correo": "-"},
-  {"id": "pisa", "empresa": "PiSA", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Farmacéutico", "contacto": "Alejandro Troya", "cargo": "Chief Corporate Officer", "telefono": "33 2184 9976", "correo": "atroya@pisa.com.mx"}
+  {"id": "pisa", "empresa": "PiSA", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Farmacéutico", "contacto": "Alejandro Troya", "cargo": "Chief Corporate Officer", "telefono": "33 2184 9976", "correo": "atroya@pisa.com.mx"},
+  {"id": "fantasias-miguel", "empresa": "Fantasías Miguel", "clasificacion": "AAA", "estado": "Ciudad de México", "zona": "Metro", "industria": "Retail", "contacto": "David Litchi", "cargo": "CEO", "telefono": "55 5438 3619", "correo": "david@fantasiasmiguel.com"},
+  {"id": "banco-base", "empresa": "Banco Base", "clasificacion": "AAA", "estado": "Nuevo León", "zona": "Noreste", "industria": "Servicios Financieros", "contacto": "José Ruben Rivera", "cargo": "-", "telefono": "55 1699 9686", "correo": "-"}
 ];
 
 /* =====================================================================
@@ -105,20 +107,22 @@ const LISTA_PRIORITARIA = [
   'pisa',                       // 11. PiSA
   'grupo-urrea',                // 12. Grupo URREA
   'alianza-team',               // 13. Alianza Team
-  'tajin',                      // 14. Tajín
-  'frutas-finas-de-tancitaro',  // 15. Frutas Finas de Tancítaro
-  'grupo-premier-de-occidente', // 16. Grupo Premier de Occidente
-  'plastic-trends',             // 17. Plastic Trends
-  'natura-biofoods',            // 18. Natura BioFoods
-  'el-gran-chaparral',          // 19. El Gran Chaparral
-  'el-cuatro',                  // 20. El Cuatro
-  'alipec',                     // 21. Alipec
-  'price-shoes',                // 22. Price Shoes
-  'grupo-tron',                 // 23. Grupo TRON
-  'motsa-montacargas',          // 24. Motsa Montacargas
-  'limones-monica',             // 25. Limones Mónica
-  'latin-berry-plants',         // 26. Latin Berry Plants
-  'global-frut',                // 27. Global Frut
-  'grupo-ginez',                // 28. Grupo Ginez
-  'super-kiosko'                // 29. Kiosko (Super Kiosko)
+  'fantasias-miguel',           // 14. Fantasías Miguel
+  'banco-base',                 // 15. Banco Base
+  'tajin',                      // 16. Tajín
+  'frutas-finas-de-tancitaro',  // 17. Frutas Finas de Tancítaro
+  'grupo-premier-de-occidente', // 18. Grupo Premier de Occidente
+  'plastic-trends',             // 19. Plastic Trends
+  'natura-biofoods',            // 20. Natura BioFoods
+  'el-gran-chaparral',          // 21. El Gran Chaparral
+  'el-cuatro',                  // 22. El Cuatro
+  'alipec',                     // 23. Alipec
+  'price-shoes',                // 24. Price Shoes
+  'grupo-tron',                 // 25. Grupo TRON
+  'motsa-montacargas',          // 26. Motsa Montacargas
+  'limones-monica',             // 27. Limones Mónica
+  'latin-berry-plants',         // 28. Latin Berry Plants
+  'global-frut',                // 29. Global Frut
+  'grupo-ginez',                // 30. Grupo Ginez
+  'super-kiosko'                // 31. Kiosko (Super Kiosko)
 ];
