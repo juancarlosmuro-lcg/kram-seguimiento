@@ -75,7 +75,7 @@ const CUENTAS_INICIALES = [
   {"id": "gpa", "empresa": "GPA (General de Productos para el Agua)", "clasificacion": "A", "estado": "Jalisco", "zona": "Occidente", "industria": "Material de Construcción", "contacto": "-", "cargo": "-", "telefono": "-", "correo": "-"},
   {"id": "pisa", "empresa": "PiSA", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Farmacéutico", "contacto": "Alejandro Troya", "cargo": "Chief Corporate Officer", "telefono": "33 2184 9976", "correo": "atroya@pisa.com.mx"},
   {"id": "fantasias-miguel", "empresa": "Fantasías Miguel", "clasificacion": "AAA", "estado": "Ciudad de México", "zona": "Metro", "industria": "Retail", "contacto": "David Litchi", "cargo": "CEO", "telefono": "55 5438 3619", "correo": "david@fantasiasmiguel.com"},
-  {"id": "banco-base", "empresa": "Banco Base", "clasificacion": "AAA", "estado": "Nuevo León", "zona": "Noreste", "industria": "Servicios Financieros", "contacto": "José Ruben Rivera", "cargo": "-", "telefono": "55 1699 9686", "correo": "-"}
+  {"id": "banco-base", "empresa": "Banco Base", "clasificacion": "AAA", "estado": "Nuevo León", "zona": "Noreste", "industria": "Servicios Financieros", "contacto": "José Ruben Rivera", "cargo": "Communications Manager", "telefono": "55 1699 9686", "correo": "-"}
 ];
 
 /* =====================================================================
