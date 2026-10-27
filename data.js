@@ -75,7 +75,9 @@ const CUENTAS_INICIALES = [
   {"id": "gpa", "empresa": "GPA (General de Productos para el Agua)", "clasificacion": "A", "estado": "Jalisco", "zona": "Occidente", "industria": "Material de Construcción", "contacto": "-", "cargo": "-", "telefono": "-", "correo": "-"},
   {"id": "pisa", "empresa": "PiSA", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Farmacéutico", "contacto": "Alejandro Troya", "cargo": "Chief Corporate Officer", "telefono": "33 2184 9976", "correo": "atroya@pisa.com.mx"},
   {"id": "fantasias-miguel", "empresa": "Fantasías Miguel", "clasificacion": "AAA", "estado": "Ciudad de México", "zona": "Metro", "industria": "Retail", "contacto": "David Litchi", "cargo": "CEO", "telefono": "55 5438 3619", "correo": "david@fantasiasmiguel.com"},
-  {"id": "banco-base", "empresa": "Banco Base", "clasificacion": "AAA", "estado": "Nuevo León", "zona": "Noreste", "industria": "Servicios Financieros", "contacto": "José Ruben Rivera", "cargo": "Communications Manager", "telefono": "55 1699 9686", "correo": "-"}
+  {"id": "banco-base", "empresa": "Banco Base", "clasificacion": "AAA", "estado": "Nuevo León", "zona": "Noreste", "industria": "Servicios Financieros", "contacto": "José Ruben Rivera", "cargo": "-", "telefono": "55 1699 9686", "correo": "-"},
+  {"id": "karey-alimentos", "empresa": "Karey Alimentos", "clasificacion": "A", "estado": "Sinaloa", "zona": "Noroeste", "industria": "Bienes de Consumo", "contacto": "Raúl Reynoso", "cargo": "Director General", "telefono": "66 9145 4825", "correo": "-"},
+  {"id": "mexicomm", "empresa": "Mexicomm", "clasificacion": "A", "estado": "Ciudad de México", "zona": "Metro", "industria": "Agroinsumos", "contacto": "Martha González", "cargo": "CEO", "telefono": "55 5504 5639", "correo": "-"}
 ];
 
 /* =====================================================================
@@ -109,20 +111,22 @@ const LISTA_PRIORITARIA = [
   'alianza-team',               // 13. Alianza Team
   'fantasias-miguel',           // 14. Fantasías Miguel
   'banco-base',                 // 15. Banco Base
-  'tajin',                      // 16. Tajín
-  'frutas-finas-de-tancitaro',  // 17. Frutas Finas de Tancítaro
-  'grupo-premier-de-occidente', // 18. Grupo Premier de Occidente
-  'plastic-trends',             // 19. Plastic Trends
-  'natura-biofoods',            // 20. Natura BioFoods
-  'el-gran-chaparral',          // 21. El Gran Chaparral
-  'el-cuatro',                  // 22. El Cuatro
-  'alipec',                     // 23. Alipec
-  'price-shoes',                // 24. Price Shoes
-  'grupo-tron',                 // 25. Grupo TRON
-  'motsa-montacargas',          // 26. Motsa Montacargas
-  'limones-monica',             // 27. Limones Mónica
-  'latin-berry-plants',         // 28. Latin Berry Plants
-  'global-frut',                // 29. Global Frut
-  'grupo-ginez',                // 30. Grupo Ginez
-  'super-kiosko'                // 31. Kiosko (Super Kiosko)
+  'karey-alimentos',            // 16. Karey Alimentos
+  'mexicomm',                   // 17. Mexicomm
+  'tajin',                      // 18. Tajín
+  'frutas-finas-de-tancitaro',  // 19. Frutas Finas de Tancítaro
+  'grupo-premier-de-occidente', // 20. Grupo Premier de Occidente
+  'plastic-trends',             // 21. Plastic Trends
+  'natura-biofoods',            // 22. Natura BioFoods
+  'el-gran-chaparral',          // 23. El Gran Chaparral
+  'el-cuatro',                  // 24. El Cuatro
+  'alipec',                     // 25. Alipec
+  'price-shoes',                // 26. Price Shoes
+  'grupo-tron',                 // 27. Grupo TRON
+  'motsa-montacargas',          // 28. Motsa Montacargas
+  'limones-monica',             // 29. Limones Mónica
+  'latin-berry-plants',         // 30. Latin Berry Plants
+  'global-frut',                // 31. Global Frut
+  'grupo-ginez',                // 32. Grupo Ginez
+  'super-kiosko'                // 33. Kiosko (Super Kiosko)
 ];
