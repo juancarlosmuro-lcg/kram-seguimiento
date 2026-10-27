@@ -75,9 +75,11 @@ const CUENTAS_INICIALES = [
   {"id": "gpa", "empresa": "GPA (General de Productos para el Agua)", "clasificacion": "A", "estado": "Jalisco", "zona": "Occidente", "industria": "Material de Construcción", "contacto": "-", "cargo": "-", "telefono": "-", "correo": "-"},
   {"id": "pisa", "empresa": "PiSA", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Farmacéutico", "contacto": "Alejandro Troya", "cargo": "Chief Corporate Officer", "telefono": "33 2184 9976", "correo": "atroya@pisa.com.mx"},
   {"id": "fantasias-miguel", "empresa": "Fantasías Miguel", "clasificacion": "AAA", "estado": "Ciudad de México", "zona": "Metro", "industria": "Retail", "contacto": "David Litchi", "cargo": "CEO", "telefono": "55 5438 3619", "correo": "david@fantasiasmiguel.com"},
-  {"id": "banco-base", "empresa": "Banco Base", "clasificacion": "AAA", "estado": "Nuevo León", "zona": "Noreste", "industria": "Servicios Financieros", "contacto": "José Ruben Rivera", "cargo": "Communications Manager", "telefono": "55 1699 9686", "correo": "-"},
+  {"id": "banco-base", "empresa": "Banco Base", "clasificacion": "AAA", "estado": "Nuevo León", "zona": "Noreste", "industria": "Servicios Financieros", "contacto": "José Ruben Rivera", "cargo": "-", "telefono": "55 1699 9686", "correo": "-"},
   {"id": "karey-alimentos", "empresa": "Karey Alimentos", "clasificacion": "A", "estado": "Sinaloa", "zona": "Noroeste", "industria": "Bienes de Consumo", "contacto": "Raúl Reynoso", "cargo": "Director General", "telefono": "66 9145 4825", "correo": "-"},
-  {"id": "mexicomm", "empresa": "Mexicomm", "clasificacion": "A", "estado": "Ciudad de México", "zona": "Metro", "industria": "Agroinsumos", "contacto": "Martha González", "cargo": "CEO", "telefono": "55 5504 5639", "correo": "-"}
+  {"id": "mexicomm", "empresa": "Mexicomm", "clasificacion": "A", "estado": "Ciudad de México", "zona": "Metro", "industria": "Agroinsumos", "contacto": "Martha González", "cargo": "CEO", "telefono": "55 5504 5639", "correo": "-"},
+  {"id": "aak-mexico", "empresa": "AAK México", "clasificacion": "AA", "estado": "Michoacán", "zona": "Occidente", "industria": "Bienes de Consumo", "contacto": "Lourdes Hernández", "cargo": "Americas Sustainability Manager", "telefono": "-", "correo": "lourdes.hernandez@aak.com"},
+  {"id": "joper", "empresa": "JOPER", "clasificacion": "A", "estado": "Durango", "zona": "Noreste", "industria": "Construcción", "contacto": "Luis González", "cargo": "Gerente de Ventas", "telefono": "87 1795 9659", "correo": "-"}
 ];
 
 /* =====================================================================
@@ -112,21 +114,23 @@ const LISTA_PRIORITARIA = [
   'fantasias-miguel',           // 14. Fantasías Miguel
   'banco-base',                 // 15. Banco Base
   'karey-alimentos',            // 16. Karey Alimentos
-  'mexicomm',                   // 17. Mexicomm
-  'tajin',                      // 18. Tajín
-  'frutas-finas-de-tancitaro',  // 19. Frutas Finas de Tancítaro
-  'grupo-premier-de-occidente', // 20. Grupo Premier de Occidente
-  'plastic-trends',             // 21. Plastic Trends
-  'natura-biofoods',            // 22. Natura BioFoods
-  'el-gran-chaparral',          // 23. El Gran Chaparral
-  'el-cuatro',                  // 24. El Cuatro
-  'alipec',                     // 25. Alipec
-  'price-shoes',                // 26. Price Shoes
-  'grupo-tron',                 // 27. Grupo TRON
-  'motsa-montacargas',          // 28. Motsa Montacargas
-  'limones-monica',             // 29. Limones Mónica
-  'latin-berry-plants',         // 30. Latin Berry Plants
-  'global-frut',                // 31. Global Frut
-  'grupo-ginez',                // 32. Grupo Ginez
-  'super-kiosko'                // 33. Kiosko (Super Kiosko)
+  'aak-mexico',                 // 17. AAK México
+  'joper',                      // 18. JOPER
+  'mexicomm',                   // 19. Mexicomm
+  'tajin',                      // 20. Tajín
+  'frutas-finas-de-tancitaro',  // 21. Frutas Finas de Tancítaro
+  'grupo-premier-de-occidente', // 22. Grupo Premier de Occidente
+  'plastic-trends',             // 23. Plastic Trends
+  'natura-biofoods',            // 24. Natura BioFoods
+  'el-gran-chaparral',          // 25. El Gran Chaparral
+  'el-cuatro',                  // 26. El Cuatro
+  'alipec',                     // 27. Alipec
+  'price-shoes',                // 28. Price Shoes
+  'grupo-tron',                 // 29. Grupo TRON
+  'motsa-montacargas',          // 30. Motsa Montacargas
+  'limones-monica',             // 31. Limones Mónica
+  'latin-berry-plants',         // 32. Latin Berry Plants
+  'global-frut',                // 33. Global Frut
+  'grupo-ginez',                // 34. Grupo Ginez
+  'super-kiosko'                // 35. Kiosko (Super Kiosko)
 ];
