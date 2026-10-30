@@ -79,7 +79,9 @@ const CUENTAS_INICIALES = [
   {"id": "karey-alimentos", "empresa": "Karey Alimentos", "clasificacion": "A", "estado": "Sinaloa", "zona": "Noroeste", "industria": "Bienes de Consumo", "contacto": "Raúl Reynoso", "cargo": "Director General", "telefono": "66 9145 4825", "correo": "-"},
   {"id": "mexicomm", "empresa": "Mexicomm", "clasificacion": "A", "estado": "Ciudad de México", "zona": "Metro", "industria": "Agroinsumos", "contacto": "Martha González", "cargo": "CEO", "telefono": "55 5504 5639", "correo": "-"},
   {"id": "aak-mexico", "empresa": "AAK México", "clasificacion": "AA", "estado": "Michoacán", "zona": "Occidente", "industria": "Bienes de Consumo", "contacto": "Lourdes Hernández", "cargo": "Americas Sustainability Manager", "telefono": "-", "correo": "lourdes.hernandez@aak.com"},
-  {"id": "joper", "empresa": "JOPER", "clasificacion": "A", "estado": "Durango", "zona": "Noreste", "industria": "Construcción", "contacto": "Luis González", "cargo": "Gerente de Ventas", "telefono": "87 1795 9659", "correo": "-"}
+  {"id": "joper", "empresa": "JOPER", "clasificacion": "A", "estado": "Durango", "zona": "Noreste", "industria": "Construcción", "contacto": "Luis González", "cargo": "Gerente de Ventas", "telefono": "87 1795 9659", "correo": "-"},
+  {"id": "flex", "empresa": "Flex", "clasificacion": "AAA", "estado": "Jalisco", "zona": "Occidente", "industria": "Manufactura", "contacto": "Alan Peña", "cargo": "Program Management Manager", "telefono": "33 3200 6783", "correo": "alan.pena@flex.com"},
+  {"id": "radial-llantas", "empresa": "Radial Llantas", "clasificacion": "AA", "estado": "Jalisco", "zona": "Occidente", "industria": "Autopartes", "contacto": "Pablo González Luna", "cargo": "Director Comercial", "telefono": "33 3578 6729", "correo": "pablo.gonzalezluna@radial.com.mx"}
 ];
 
 /* =====================================================================
@@ -116,21 +118,23 @@ const LISTA_PRIORITARIA = [
   'karey-alimentos',            // 16. Karey Alimentos
   'aak-mexico',                 // 17. AAK México
   'joper',                      // 18. JOPER
-  'mexicomm',                   // 19. Mexicomm
-  'tajin',                      // 20. Tajín
-  'frutas-finas-de-tancitaro',  // 21. Frutas Finas de Tancítaro
-  'grupo-premier-de-occidente', // 22. Grupo Premier de Occidente
-  'plastic-trends',             // 23. Plastic Trends
-  'natura-biofoods',            // 24. Natura BioFoods
-  'el-gran-chaparral',          // 25. El Gran Chaparral
-  'el-cuatro',                  // 26. El Cuatro
-  'alipec',                     // 27. Alipec
-  'price-shoes',                // 28. Price Shoes
-  'grupo-tron',                 // 29. Grupo TRON
-  'motsa-montacargas',          // 30. Motsa Montacargas
-  'limones-monica',             // 31. Limones Mónica
-  'latin-berry-plants',         // 32. Latin Berry Plants
-  'global-frut',                // 33. Global Frut
-  'grupo-ginez',                // 34. Grupo Ginez
-  'super-kiosko'                // 35. Kiosko (Super Kiosko)
+  'flex',                       // 19. Flex
+  'radial-llantas',             // 20. Radial Llantas
+  'mexicomm',                   // 21. Mexicomm
+  'tajin',                      // 22. Tajín
+  'frutas-finas-de-tancitaro',  // 23. Frutas Finas de Tancítaro
+  'grupo-premier-de-occidente', // 24. Grupo Premier de Occidente
+  'plastic-trends',             // 25. Plastic Trends
+  'natura-biofoods',            // 26. Natura BioFoods
+  'el-gran-chaparral',          // 27. El Gran Chaparral
+  'el-cuatro',                  // 28. El Cuatro
+  'alipec',                     // 29. Alipec
+  'price-shoes',                // 30. Price Shoes
+  'grupo-tron',                 // 31. Grupo TRON
+  'motsa-montacargas',          // 32. Motsa Montacargas
+  'limones-monica',             // 33. Limones Mónica
+  'latin-berry-plants',         // 34. Latin Berry Plants
+  'global-frut',                // 35. Global Frut
+  'grupo-ginez',                // 36. Grupo Ginez
+  'super-kiosko'                // 37. Kiosko (Super Kiosko)
 ];
